@@ -14,6 +14,7 @@
 		3F27EB622AF16436000C3AE0 /* TESTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB612AF16436000C3AE0 /* TESTTests.swift */; };
 		3F27EB6C2AF16436000C3AE0 /* TESTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB6B2AF16436000C3AE0 /* TESTUITests.swift */; };
 		3F27EB6E2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB6D2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift */; };
+		3F27EB7F2AF17043000C3AE0 /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB7E2AF17043000C3AE0 /* Favorites.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		3F27EB672AF16436000C3AE0 /* TESTUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TESTUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F27EB6B2AF16436000C3AE0 /* TESTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTUITests.swift; sourceTree = "<group>"; };
 		3F27EB6D2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		3F27EB7E2AF17043000C3AE0 /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				3F27EB522AF16435000C3AE0 /* ContentView.swift */,
 				3F27EB542AF16436000C3AE0 /* Assets.xcassets */,
 				3F27EB562AF16436000C3AE0 /* Preview Content */,
+				3F27EB7E2AF17043000C3AE0 /* Favorites.swift */,
 			);
 			path = TEST;
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F27EB7F2AF17043000C3AE0 /* Favorites.swift in Sources */,
 				3F27EB532AF16435000C3AE0 /* ContentView.swift in Sources */,
 				3F27EB512AF16435000C3AE0 /* TESTApp.swift in Sources */,
 			);
