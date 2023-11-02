@@ -18,11 +18,12 @@ struct temp: View {
              
     var body: some View {
         VStack {
-            Text("<Favorites Button>")
+            Text("< Favorites Button >")
                 .onTapGesture {
                     //selectedMeal = Meal
                     showingSheet = true
                 }
+                .foregroundColor(CustomTeal.MyTeal)
                 .sheet(isPresented: $showingSheet) {
                     FavoritesView(showingSheet: $showingSheet, favoritesList: $favoritesList /*, selectedMeal: $selectedPost*/)
             }
@@ -41,6 +42,7 @@ struct FavoritesView: View {
                 Spacer()
                 Text("Favorites")
                     .padding()
+                    .foregroundColor(CustomTeal.MyTeal)
                     .font(.system(size:30))
                 
                 Spacer()
@@ -48,15 +50,21 @@ struct FavoritesView: View {
                 Button("X") {
                     showingSheet = false
                 }
-                .foregroundColor(Color.red)
+                .foregroundColor(Color.black)
                 .font(.system(size:25))
                 .padding()
             }
+            .background(Color.white)
+            
+            Divider()
+                .frame(width:340, height: 2)
+                .overlay(CustomTeal.MyTeal)
             
             List {
                 ForEach(favoritesList, id: \.id) { Meal in
                     HStack {
                         Text("\(Meal.name)")
+                            .foregroundColor(CustomTeal.MyTeal)
                             .onTapGesture {
                                 print("tapped on Meal \(Meal.id)")
                         }
@@ -65,16 +73,32 @@ struct FavoritesView: View {
                             
                         Text("-")
                             .font(.system(size:20))
+                            .foregroundColor(CustomTeal.MyTeal)
                             .onTapGesture {
                                 if let index = favoritesList.firstIndex(where: { $0.id == Meal.id }) {
                                     favoritesList.remove(at: index)
                                 }
                             }
                     }
+                    .listRowBackground(CustomGrey.MyGrey)
+                    .listRowSeparatorTint(Color.white)
                 }
             }
         }
+        .listRowBackground(CustomGrey.MyGrey)
+        .scrollContentBackground(.hidden)
     }
+}
+
+
+
+
+struct CustomTeal {
+    static let MyTeal = Color("Teal")
+}
+
+struct CustomGrey {
+    static let MyGrey = Color("Grey")
 }
 
 struct Meal: Codable, Identifiable {
