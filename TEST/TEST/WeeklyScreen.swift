@@ -23,6 +23,8 @@ import SwiftUI
 
 //View
 struct WeeklyScreen: View {
+    @ObservedObject var viewModel: WeeklyScreenViewModel
+//    @State var
     var body: some View {
         VStack {
             HStack{
@@ -33,26 +35,71 @@ struct WeeklyScreen: View {
             //will be a list week (a the day list from VM)
             //have Text for day of week (sun, mon, etc.)
             //each entry from list wil display the day.breakfast, etc
+            List {
+                ForEach(viewModel.week, id: \.dayOfWeek) {day in
+                    VStack{
+                        HStack{
+                            //Text("\(day.dayOfWeek)")
+                            Text("\(day.name)")
+                                .font(.title)
+                            Spacer()
+                        }
+                        HStack{
+                            Button("B"){
+                                mealButton()
+                            }
+                            Spacer()
+                            Button("L"){
+                                mealButton()
+                            }
+                            Spacer()
+                            Button("D"){
+                                mealButton()
+                            }
+                            Spacer()
+                        }
+                    }
+                }
+            }
             
         }
         .padding()
     }
+    func mealButton() {
+        //if ... open this or open that
+    }
 }
+
+
+
 
 //ViewModel
 class WeeklyScreenViewModel: ObservableObject{
-    @Published var week: [Day] = []
+    @Published var week: [Day] = [
+        Day(dayOfWeek: 0, name: "Sunday"),
+        Day(dayOfWeek: 1, name: "Monday"),
+        Day(dayOfWeek: 2, name: "Tuesday"),
+        Day(dayOfWeek: 3, name: "Wednesday"),
+        Day(dayOfWeek: 4, name: "Thursday"),
+        Day(dayOfWeek: 5, name: "Friday"),
+        Day(dayOfWeek: 6, name: "Saturday")
+    ]
     
     //add meals & stuff in here
     
     //create each day object
-    let monday = Day(dayOfWeek: 1)
+//    let monday = Day(dayOfWeek: 1)
+    
+//    func addDays (){
+//        week.append(monday: Day)
+//    }
     
 }
 
 //Model
 struct Day {
     let dayOfWeek: Int //0=sun, 1=mon, ... 6=sat
+    let name: String
 //    let month: Int
 //    let dayOfMonth: Int
 //    let year: Int
@@ -64,6 +111,6 @@ struct Day {
 
 struct WeeklyScreen_Previews: PreviewProvider {
     static var previews: some View {
-        WeeklyScreen()
+        WeeklyScreen(viewModel: WeeklyScreenViewModel())
     }
 }
