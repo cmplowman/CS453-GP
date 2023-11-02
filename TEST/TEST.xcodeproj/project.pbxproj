@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		24B43EB22AF430AB0048F621 /* AddMealScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B43EB12AF430AB0048F621 /* AddMealScreen.swift */; };
+		24B43EB42AF434F60048F621 /* Home Screen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24B43EB32AF434F60048F621 /* Home Screen.swift */; };
 		3F27EB512AF16435000C3AE0 /* TESTApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB502AF16435000C3AE0 /* TESTApp.swift */; };
 		3F27EB532AF16435000C3AE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB522AF16435000C3AE0 /* ContentView.swift */; };
 		3F27EB552AF16436000C3AE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F27EB542AF16436000C3AE0 /* Assets.xcassets */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		24B43EB12AF430AB0048F621 /* AddMealScreen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddMealScreen.swift; sourceTree = "<group>"; };
+		24B43EB32AF434F60048F621 /* Home Screen.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Home Screen.swift"; sourceTree = "<group>"; };
 		3F27EB4D2AF16435000C3AE0 /* TEST.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TEST.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F27EB502AF16435000C3AE0 /* TESTApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTApp.swift; sourceTree = "<group>"; };
 		3F27EB522AF16435000C3AE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 				3F27EB7E2AF17043000C3AE0 /* Favorites.swift */,
 				D0B7B39F2AF402F700AD24A9 /* WeeklyScreen.swift */,
 				24B43EB12AF430AB0048F621 /* AddMealScreen.swift */,
+				24B43EB32AF434F60048F621 /* Home Screen.swift */,
 				3F27EB542AF16436000C3AE0 /* Assets.xcassets */,
 				3F27EB562AF16436000C3AE0 /* Preview Content */,
 			);
@@ -271,6 +274,7 @@
 				3F27EB532AF16435000C3AE0 /* ContentView.swift in Sources */,
 				D0B7B3A02AF402F700AD24A9 /* WeeklyScreen.swift in Sources */,
 				3F27EB512AF16435000C3AE0 /* TESTApp.swift in Sources */,
+				24B43EB42AF434F60048F621 /* Home Screen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
