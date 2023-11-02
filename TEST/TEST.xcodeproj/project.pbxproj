@@ -98,9 +98,9 @@
 			children = (
 				3F27EB502AF16435000C3AE0 /* TESTApp.swift */,
 				3F27EB522AF16435000C3AE0 /* ContentView.swift */,
+				3F27EB7E2AF17043000C3AE0 /* Favorites.swift */,
 				3F27EB542AF16436000C3AE0 /* Assets.xcassets */,
 				3F27EB562AF16436000C3AE0 /* Preview Content */,
-				3F27EB7E2AF17043000C3AE0 /* Favorites.swift */,
 			);
 			path = TEST;
 			sourceTree = "<group>";
