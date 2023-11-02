@@ -10,7 +10,15 @@ import SwiftUI
 struct AddMealScreen: View {
     var body: some View {
         VStack {
-            Text("TEST")
+            
+            Button{
+               print("Tapped")
+            }label: {
+                Label("Add Meal", systemImage: "fork.knife.circle.fill")
+            }
+            .buttonStyle(.bordered)
+            .tint(.blue)
+            
         }
     }
 }
