@@ -20,6 +20,7 @@ struct ContentView: View {
 }
 //peter waz here
 // Chris was here 
+// Christoph was here
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
