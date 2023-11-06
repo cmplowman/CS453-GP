@@ -21,94 +21,219 @@
 
 import SwiftUI
 
+
+//
+//ViewModel
+//
+class WeeklyScreenViewModel: ObservableObject {
+    @Published var week: [Day]
+    
+    //initializer
+    init() {
+        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) }
+        setupDefaultMeals() //take out when have proper adding
+    }
+    private static func dayName(for dayOfWeek: Int) -> String {
+        ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]
+    }
+    
+    //creates example meals for each day/time
+    private func setupDefaultMeals() {
+        for i in 0..<week.count {
+            week[i].breakfast = fakeMeal(name: "Pancakes", calories: 300)
+//            week[i].lunch = fakeMeal(name: "Sandwich", calories: 500)
+            week[i].dinner = fakeMeal(name: "Pasta", calories: 700)
+        }
+    }
+    
+    //
+//    func updateMeal(for dayOfWeek: Int, meal: fakeMeal, type: MealType) {
+//        if let index = week.firstIndex(where: { $0.dayOfWeek == dayOfWeek }) {
+//            switch type {
+//            case .breakfast:
+//                week[index].breakfast = meal
+//            case .lunch:
+//                week[index].lunch = meal
+//            case .dinner:
+//                week[index].dinner = meal
+//            }
+//            self.objectWillChange.send()
+//        }
+//    }
+}
+
+
+
+
+//
+// Model
+//
+//day object - contians day and 3 meal slots
+struct Day: Identifiable {
+    let id: Int
+    let dayOfWeek: Int
+    let name: String
+    var breakfast: fakeMeal?
+    var lunch: fakeMeal?
+    var dinner: fakeMeal?
+}
+
+//simple meal object
+struct fakeMeal: Identifiable, Equatable {
+    let id = UUID()
+    var name: String
+    var calories: Int
+}
+
+enum MealType {
+    case breakfast, lunch, dinner
+}
+
+
+
+
+
+//
 //View
+//
+//Week Screen
 struct WeeklyScreen: View {
     @ObservedObject var viewModel: WeeklyScreenViewModel
-//    @State var
+    @State private var showingAddMeal = false
+    @State private var showingMealDetails = false
+    @State private var selectedMeal: fakeMeal?
+
     var body: some View {
         VStack {
-            HStack{
-                Text("Week")
-                    .font(.largeTitle)
-            }
-            Spacer()
-            //will be a list week (a the day list from VM)
-            //have Text for day of week (sun, mon, etc.)
-            //each entry from list wil display the day.breakfast, etc
-            List {
-                ForEach(viewModel.week, id: \.dayOfWeek) {day in
-                    VStack{
-                        HStack{
-                            //Text("\(day.dayOfWeek)")
-                            Text("\(day.name)")
-                                .font(.title)
-                            Spacer()
-                        }
-                        HStack{
-                            Button("B"){
-                                mealButton()
-                            }
-                            Spacer()
-                            Button("L"){
-                                mealButton()
-                            }
-                            Spacer()
-                            Button("D"){
-                                mealButton()
-                            }
-                            Spacer()
-                        }
+            Text("Week").font(.largeTitle)
+            //loops through each day in the week
+            List(viewModel.week) { day in
+                VStack(alignment: .leading) {
+                    Text(day.name).font(.title)
+                    //Day
+                    HStack {
+                        //breakfast
+                        MealView(mealType: .breakfast, meal: day.breakfast,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                                    self.selectedMeal = meal
+                                    self.showingMealDetails = true
+                                 })
+                        //lunch
+                        MealView(mealType: .lunch, meal: day.lunch,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                                    self.selectedMeal = meal
+                                    self.showingMealDetails = true
+                                 })
+                        //dinner
+                        MealView(mealType: .dinner, meal: day.dinner,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                                    self.selectedMeal = meal
+                                    self.showingMealDetails = true
+                                 })
                     }
                 }
             }
-            
         }
-        .padding()
+        //opens meal details view
+        .sheet(isPresented: $showingMealDetails, onDismiss: { self.selectedMeal = nil }) {
+                    if let meal = selectedMeal {
+                        MealDetailsView(meal: meal)
+                    }
+                }
+        //opens add meal view
+        .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
+                        AddMealView()
+                }
+        //updates the meal being passed each time the current time is changed
+        .onChange(of: selectedMeal) { _ in
+                    self.showingMealDetails = (self.selectedMeal != nil)
+                }
     }
-    func mealButton() {
-        //if ... open this or open that
+}
+
+
+// MealView component - the buttons
+struct MealView: View {
+    let mealType: MealType
+    var meal: fakeMeal?
+    var addMealAction: () -> Void
+    var showMealDetailsAction: (fakeMeal) -> Void
+    
+    var body: some View {
+        VStack {
+            Text(mealTypeTitle) //B,L,D
+            //check if theres a meal in the slot
+            if let meal = meal {
+                //has meal
+                Button(action: { showMealDetailsAction(meal) }) {
+                    Text(meal.name)
+                        .foregroundColor(.black)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color.gray.opacity(0.3))
+                    )
+            } else {
+                //no meal
+                Button(action: addMealAction) {
+                    Image(systemName: "plus")
+                        .foregroundColor(.black)
+                }
+                .buttonStyle(PlainButtonStyle())
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 5)
+                        .fill(Color.gray.opacity(0.3))
+                    )
+            }
+        }
+    }
+    
+    //displays name of meal slot
+    private var mealTypeTitle: String {
+        switch mealType {
+        case .breakfast:
+            return "Breakfast"
+        case .lunch:
+            return "Lunch"
+        case .dinner:
+            return "Dinner"
+        }
     }
 }
 
 
 
 
-//ViewModel
-class WeeklyScreenViewModel: ObservableObject{
-    @Published var week: [Day] = [
-        Day(dayOfWeek: 0, name: "Sunday"),
-        Day(dayOfWeek: 1, name: "Monday"),
-        Day(dayOfWeek: 2, name: "Tuesday"),
-        Day(dayOfWeek: 3, name: "Wednesday"),
-        Day(dayOfWeek: 4, name: "Thursday"),
-        Day(dayOfWeek: 5, name: "Friday"),
-        Day(dayOfWeek: 6, name: "Saturday")
-    ]
-    
-    //add meals & stuff in here
-    
-    //create each day object
-//    let monday = Day(dayOfWeek: 1)
-    
-//    func addDays (){
-//        week.append(monday: Day)
-//    }
-    
+
+
+// AddMealView for adding a new meal
+struct AddMealView: View {
+//    var meal: fakeMeal?
+    var body: some View {
+        Text("Add a new meal")
+    }
 }
 
-//Model
-struct Day {
-    let dayOfWeek: Int //0=sun, 1=mon, ... 6=sat
-    let name: String
-//    let month: Int
-//    let dayOfMonth: Int
-//    let year: Int
-//    let breakfast: Meal
-//    let lunch: Meal
-//    let dinner: Meal
-//    let totalCal: Int
+
+// MealDetailsView for showing the details of a selected meal
+struct MealDetailsView: View {
+    var meal: fakeMeal?
+    var body: some View {
+        if let meal = meal {
+            Text("Meal details: \(meal.name), \(meal.calories) calories")
+        } else {
+            Text("No meal details available")
+        }
+    }
 }
 
+// Preview
 struct WeeklyScreen_Previews: PreviewProvider {
     static var previews: some View {
         WeeklyScreen(viewModel: WeeklyScreenViewModel())
