@@ -48,23 +48,37 @@ struct AddMealScreen: View {
                     {
                         if favoritedMeals.isEmpty
                         {
-                            //display an alert
+                            Button("Show Alert")
+                            {
+                                showingAlert.toggle()
+                            }
                             
                         }
-                        Picker(selection: $pickerSelection2, label: Text("Select From Favorites"), content: {
-                            
-                            ForEach(favoritedMeals, id: \.self) { meal in
-                                Text(meal)
-                            }})
+                        else{
+                            Picker(selection: $pickerSelection2, label: Text("Select From Favorites"), content: {
+                                
+                                ForEach(favoritedMeals, id: \.self) { meal in
+                                    Text(meal)
+                                }})
+                        }
                     }
                 }
-                
-                ForEach(favoritedMeals, id: \.self) { meal in
-                                    Text(meal)
-                                }
-                ForEach(addedMeal, id: \.self) { meal in
-                    Text(meal)
+                .alert(isPresented: $showingAlert) {
+                    
+                    Alert(
+                        title: Text("No Favorites"),
+                        message: Text("You have no favorites. Favorite a meal to see them here."),
+                        dismissButton: .cancel())
                 }
+                
+                
+                
+//                ForEach(favoritedMeals, id: \.self) { meal in
+//                                    Text(meal)
+//                                }
+//                ForEach(addedMeal, id: \.self) { meal in
+//                    Text(meal)
+//                }
                 
                 
                 //favorite button
