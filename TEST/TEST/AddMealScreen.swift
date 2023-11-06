@@ -18,7 +18,8 @@ struct AddMealScreen: View {
     var mealsExample = ["Custom Meal", "Favorites","Bacon", "Turkey", "Oatmeal"]
     @State var favoritedMeals: [String] = []
     @State var addedMeal: [String] = []
-    @State private var showingAlert = false
+    @State private var showingAlert1 = false
+    @State private var showingAlert2 = false
 
     
 
@@ -50,7 +51,7 @@ struct AddMealScreen: View {
                         {
                             Button("Show Alert")
                             {
-                                showingAlert.toggle()
+                                showingAlert1.toggle()
                             }
                             
                         }
@@ -63,7 +64,7 @@ struct AddMealScreen: View {
                         }
                     }
                 }
-                .alert(isPresented: $showingAlert) {
+                .alert(isPresented: $showingAlert1) {
                     
                     Alert(
                         title: Text("No Favorites"),
@@ -94,14 +95,14 @@ struct AddMealScreen: View {
                     else if pickerSelection == "Favorites"
                     {
                         //alert that says already exists in favorites
-                        showingAlert.toggle()
+                        showingAlert2.toggle()
 
                     }
                     else
                     {
                         if favoritedMeals.contains(pickerSelection)
                         {
-                            showingAlert.toggle()
+                            showingAlert2.toggle()
                         }
                         else{
                             favoritedMeals.append(pickerSelection)
@@ -118,7 +119,7 @@ struct AddMealScreen: View {
                 .tint(.blue)
                 .controlSize(.large)
                 
-                .alert(isPresented: $showingAlert) {
+                .alert(isPresented: $showingAlert2) {
                     
                     Alert(
                         title: Text("Duplicate Favorite"),
