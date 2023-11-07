@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AddMealScreen: View {
-    @State var pickerSelection = "Custom Meal"
+    @State var pickerSelection: testMeal
     @State var favoriteSelection = ""
 
     @State var customMeal = ""
@@ -26,9 +26,9 @@ struct AddMealScreen: View {
 
         
         
-       //Need to change type from String to testMeal
-    @State var favoritedMeals: [String] = []
-    @State var addedMeal: [String] = []
+    @State var favoritedMeals: [testMeal] = []
+    
+    @State var addedMeal: [testMeal] = []
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
 
@@ -48,18 +48,19 @@ struct AddMealScreen: View {
                     Picker(selection: $pickerSelection, label: Text("Choose Meal"), content: {
                         
                         ForEach(mealsExample) { meal in
-                            Text(meal.name).tag(meal.name)
+                            Text(meal.name).tag(meal)
                         }
                         
                         
                     })
                     
-                    if pickerSelection == "Custom Meal"
+                    if pickerSelection.name == "Custom Meal"
                     {
                         TextField("Custom Meal", text: $customMeal)
+            
                     }
                     
-                    else if pickerSelection == "Favorites"
+                    else if pickerSelection.name == "Favorites"
                     {
                         if favoritedMeals.isEmpty
                         {
@@ -72,9 +73,13 @@ struct AddMealScreen: View {
                         else{
                             Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
                                 
-                                ForEach(favoritedMeals, id: \.self) { meal in
-                                    Text(meal)
-                                }})
+                                ForEach(favoritedMeals) { meal in
+                                    Text(meal.name).tag(meal)
+                                }
+                                
+                            }
+                            )
+                        
 
                        
 
@@ -92,25 +97,19 @@ struct AddMealScreen: View {
                 
                 
                 
-//                ForEach(favoritedMeals, id: \.self) { meal in
-//                                    Text(meal)
-//                                }
-//                ForEach(addedMeal, id: \.self) { meal in
-//                    Text(meal)
-//                }
-//                
+              
                 
                 //favorite button
                 Button{
                     if !customMeal.isEmpty {
-                        if favoritedMeals.contains(customMeal) {
-                            showingAlert2.toggle()
-                        } else {
-                            favoritedMeals.append(customMeal)
-                        }
-                    } else if pickerSelection == "Custom Meal" && customMeal.isEmpty {
+//                        if favoritedMeals.contains(customMeal) {
+//                            showingAlert2.toggle()
+//                        } else {
+//                            favoritedMeals.append(customMeal)
+//                        }
+                    } else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty {
                         // Do nothing
-                    } else if pickerSelection == "Favorites" {
+                    } else if pickerSelection.name == "Favorites" {
                         showingAlert2.toggle()
                     } else {
                         if favoritedMeals.contains(pickerSelection) {
@@ -141,13 +140,13 @@ struct AddMealScreen: View {
                 Button{
                     if customMeal != ""
                     {
-                        addedMeal.append(customMeal)
+                        //addedMeal.append(customMeal)
                     }
-                    else if pickerSelection == "Favorites"
+                    else if pickerSelection.name == "Favorites"
                     {
-                        addedMeal.append(favoriteSelection)
+                       // addedMeal.append(favoriteSelection)
                     }
-                    else if pickerSelection == "Custom Meal" && customMeal.isEmpty
+                    else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty
                     {
                         //Do nothing
                     }
@@ -176,7 +175,7 @@ struct AddMealScreen: View {
 
 //Test Model
 
-struct testMeal: Identifiable {
+struct testMeal: Identifiable, Hashable {
     let name: String
     let id: Int
     let calories: Int
@@ -188,6 +187,6 @@ struct testMeal: Identifiable {
 
 struct AddMealScreen_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealScreen()
+        AddMealScreen(pickerSelection: testMeal(name: "Candy", id: 9, calories: 700))
     }
 }
