@@ -22,6 +22,14 @@
 import SwiftUI
 
 
+struct fakeView: View {
+    var body: some View {
+        Color.red
+            .edgesIgnoringSafeArea(.all)
+            .overlay(Text("View 1").foregroundColor(.white))
+    }
+}
+
 //
 //ViewModel
 //
@@ -110,6 +118,8 @@ struct WeeklyScreen: View {
             List(viewModel.week) { day in
                 VStack(alignment: .leading) {
                     Text(day.name).font(.title)
+                        .foregroundColor(CustomTeal.MyTeal)
+                    
                     //Day
                     HStack {
                         //breakfast
@@ -133,10 +143,13 @@ struct WeeklyScreen: View {
                                     self.selectedMeal = meal
                                     self.showingMealDetails = true
                                  })
+                        
+                        
                     }
                 }
             }
         }
+
         //opens meal details view
         .sheet(isPresented: $showingMealDetails, onDismiss: { self.selectedMeal = nil }) {
                     if let meal = selectedMeal {
@@ -165,34 +178,38 @@ struct MealView: View {
     var body: some View {
         VStack {
             Text(mealTypeTitle) //B,L,D
+                .foregroundColor(CustomTeal.MyTeal)
+            
             //check if theres a meal in the slot
             if let meal = meal {
                 //has meal
                 Button(action: { showMealDetailsAction(meal) }) {
                     Text(meal.name)
-                        .foregroundColor(.black)
+                        .foregroundColor(CustomTeal.MyTeal)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(Color.gray.opacity(0.3))
+                        .fill(CustomGrey.MyGrey.opacity(0.6))
                     )
             } else {
                 //no meal
                 Button(action: addMealAction) {
                     Image(systemName: "plus")
-                        .foregroundColor(.black)
+                        .foregroundColor(CustomTeal.MyTeal)
                 }
                 .buttonStyle(PlainButtonStyle())
                 .padding()
                 .background(
                     RoundedRectangle(cornerRadius: 5)
-                        .fill(Color.gray.opacity(0.3))
+                        .fill(CustomGrey.MyGrey.opacity(0.6))
                     )
             }
         }
     }
+    
+    
     
     //displays name of meal slot
     private var mealTypeTitle: String {
@@ -239,3 +256,4 @@ struct WeeklyScreen_Previews: PreviewProvider {
         WeeklyScreen(viewModel: WeeklyScreenViewModel())
     }
 }
+
