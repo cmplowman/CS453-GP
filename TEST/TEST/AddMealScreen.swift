@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddMealScreen: View {
     @State var pickerSelection: testMeal
-    @State var favoriteSelection = ""
+    @State var favoriteSelection: testMeal
 
     @State var customMeal = ""
 
@@ -29,6 +29,7 @@ struct AddMealScreen: View {
     @State var favoritedMeals: [testMeal] = []
     
     @State var addedMeal: [testMeal] = []
+    
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
 
@@ -187,6 +188,6 @@ struct testMeal: Identifiable, Hashable {
 
 struct AddMealScreen_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealScreen(pickerSelection: testMeal(name: "Candy", id: 9, calories: 700))
+        AddMealScreen(pickerSelection: testMeal(name: "Candy", id: 9, calories: 700), favoriteSelection: testMeal(name: "Candy", id: 9, calories: 700))
     }
 }
