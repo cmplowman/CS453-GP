@@ -158,7 +158,7 @@ struct WeeklyScreen: View {
                 }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-                        AddMealView()
+                AddMealScreen(pickerSelection: testMeal(name: "Candy", id: 9, calories: 700), favoriteSelection: testMeal(name: "Candy", id: 9, calories: 700))
                 }
         //updates the meal being passed each time the current time is changed
         .onChange(of: selectedMeal) { _ in
