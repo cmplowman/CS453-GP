@@ -42,133 +42,143 @@ struct AddMealScreen: View {
     var body: some View {
         
         NavigationView{
-            VStack {
+            ZStack{
+                CustomTeal.MyTeal
                 
-                
-                Form{
-                    Picker(selection: $pickerSelection, label: Text("Choose Meal"), content: {
-                        
-                        ForEach(mealsExample) { meal in
-                            Text(meal.name).tag(meal)
-                        }
-                        
-                        
-                    })
+                VStack {
                     
-                    if pickerSelection.name == "Custom Meal"
-                    {
-                        TextField("Custom Meal", text: $customMeal)
-            
-                    }
                     
-                    else if pickerSelection.name == "Favorites"
-                    {
-                        if favoritedMeals.isEmpty
-                        {
-                            Button("Show Alert")
-                            {
-                                showingAlert1.toggle()
+                    Form{
+                        Picker(selection: $pickerSelection, label: Text("Choose Meal"), content: {
+                            
+                            ForEach(mealsExample) { meal in
+                                Text(meal.name).tag(meal)
                             }
                             
+                            
+                        })
+                        
+                        if pickerSelection.name == "Custom Meal"
+                        {
+                            TextField("Custom Meal", text: $customMeal)
+                            
                         }
-                        else{
-                            Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
-                                
-                                ForEach(favoritedMeals) { meal in
-                                    Text(meal.name).tag(meal)
+                        
+                        else if pickerSelection.name == "Favorites"
+                        {
+                            if favoritedMeals.isEmpty
+                            {
+                                Button("Show Alert")
+                                {
+                                    showingAlert1.toggle()
                                 }
                                 
                             }
-                            )
-                        
-
-                       
-
-                            
+                            else{
+                                Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
+                                    
+                                    ForEach(favoritedMeals) { meal in
+                                        Text(meal.name).tag(meal)
+                                    }
+                                    
+                                }
+                                )
+                                
+                                
+                                
+                                
+                                
+                            }
                         }
                     }
-                }
-                .alert(isPresented: $showingAlert1) {
+                    .background(CustomTeal.MyTeal)
+                    .scrollContentBackground(.hidden)
+                    .alert(isPresented: $showingAlert1) {
+                        
+                        Alert(
+                            title: Text("No Favorites"),
+                            message: Text("You have no favorites. Favorite a meal to see them here."),
+                            dismissButton: .cancel())
+                    }
                     
-                    Alert(
-                        title: Text("No Favorites"),
-                        message: Text("You have no favorites. Favorite a meal to see them here."),
-                        dismissButton: .cancel())
-                }
-                
-                
-                
-              
-                
-                //favorite button
-                Button{
-                    if !customMeal.isEmpty {
-//                        if favoritedMeals.contains(customMeal) {
-//                            showingAlert2.toggle()
-//                        } else {
-//                            favoritedMeals.append(customMeal)
-//                        }
-                    } else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty {
-                        // Do nothing
-                    } else if pickerSelection.name == "Favorites" {
-                        showingAlert2.toggle()
-                    } else {
-                        if favoritedMeals.contains(pickerSelection) {
+                    
+                    
+                    
+                    
+                    //favorite button
+                    Button{
+                        if !customMeal.isEmpty {
+                            //                        if favoritedMeals.contains(customMeal) {
+                            //                            showingAlert2.toggle()
+                            //                        } else {
+                            //                            favoritedMeals.append(customMeal)
+                            //                        }
+                        } else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty {
+                            // Do nothing
+                        } else if pickerSelection.name == "Favorites" {
                             showingAlert2.toggle()
                         } else {
-                            favoritedMeals.append(pickerSelection)
+                            if favoritedMeals.contains(pickerSelection) {
+                                showingAlert2.toggle()
+                            } else {
+                                favoritedMeals.append(pickerSelection)
+                            }
                         }
+                        
+                    }label: {
+                        Label("Favorite", systemImage: "star.fill")
+                            .frame(width: 340)
+                            .font(.system(size: 30))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .foregroundColor(CustomTeal.MyTeal)
+                    .tint(.white)
+                    .controlSize(.large)
+                    
+                    
+                    .alert(isPresented: $showingAlert2) {
+                        
+                        Alert(
+                            title: Text("Duplicate Favorite"),
+                            message: Text("You have already favorited this Meal"),
+                            dismissButton: .cancel())
                     }
                     
-                }label: {
-                    Label("Favorite", systemImage: "star.fill")
-                        .frame(maxWidth: .infinity)
-                        .font(.system(size: 30))
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue)
-                .controlSize(.large)
-                
-                .alert(isPresented: $showingAlert2) {
+                    //add meal button
+                    Button{
+                        if customMeal != ""
+                        {
+                            //addedMeal.append(customMeal)
+                        }
+                        else if pickerSelection.name == "Favorites"
+                        {
+                            // addedMeal.append(favoriteSelection)
+                        }
+                        else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty
+                        {
+                            //Do nothing
+                        }
+                        else
+                        {
+                            addedMeal.append(pickerSelection)
+                        }
+                        
+                    }label: {
+                        Label("Add Meal", systemImage: "fork.knife.circle.fill")
+                            .frame(width: 340)
+                            .font(.system(size: 30))
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .foregroundColor(CustomTeal.MyTeal)
+                    .tint(.white)
+                    .controlSize(.large)
+                    .background(CustomTeal.MyTeal)
                     
-                    Alert(
-                        title: Text("Duplicate Favorite"),
-                        message: Text("You have already favorited this Meal"),
-                        dismissButton: .cancel())
+                    
+                    
                 }
-                
-                //add meal button
-                Button{
-                    if customMeal != ""
-                    {
-                        //addedMeal.append(customMeal)
-                    }
-                    else if pickerSelection.name == "Favorites"
-                    {
-                       // addedMeal.append(favoriteSelection)
-                    }
-                    else if pickerSelection.name == "Custom Meal" && customMeal.isEmpty
-                    {
-                        //Do nothing
-                    }
-                    else
-                    {
-                        addedMeal.append(pickerSelection)
-                    }
-
-                }label: {
-                    Label("Add Meal", systemImage: "fork.knife.circle.fill")
-                        .frame(maxWidth: .infinity)
-                        .font(.system(size: 30))
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue)
-                .controlSize(.large)
-                
-                
-                
+                .navigationTitle("Add Meal")
             }
-            .navigationTitle("Add Meal")
         }
     }
 }
