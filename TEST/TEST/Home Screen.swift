@@ -7,9 +7,6 @@
 
 import SwiftUI
 
-//
-//CHANGES again
-
 struct HomeContentView: View {
     @State private var showingSheet = false
     @State var favoritesList: [Meal] = [
@@ -33,16 +30,17 @@ struct HomeContentView: View {
                     BLDView()
                 }
                 .toolbar{
-                    //Color.CustomGrey.MyGrey
                     ToolbarItem(placement: .bottomBar){
-                        
                         VStack{
-                            
-                            Button("---") //temporary
-                            {
-                                //pop up nutritional values
-                                //
-                            }
+                            RoundedRectangle(cornerSize: CGSize(width: 20, height: 10))
+                                .frame(width: 100,height: 23)
+                                .foregroundStyle(CustomGrey.MyGrey)
+                            Rectangle()
+                                    
+                                .frame(width: 40, height: 5)
+                                .foregroundColor(.gray)
+                                .cornerRadius(5)
+                                .padding(.vertical, 5)
                         }
                     }
                 }
@@ -52,6 +50,7 @@ struct HomeContentView: View {
     }
     
 }
+
 struct swipeView: View
 {
     @State private var isViewVisible = false
@@ -84,25 +83,21 @@ struct swipeView: View
     
 }
 
-//struct addMealView
 struct favorites: View {
     @Binding var showingSheet: Bool
     @Binding var favoritesList: [Meal]
 
     var body: some View {
         VStack{
-            //title()
             HStack{
                 
                 Text("Meal Tracker")
-                    //.font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.vertical)
                     .font(.system(size: 35))
                     .foregroundStyle(.white)
-                //let myFavorites = FavoritesView(showingSheet:, favoritesList: )
                 Image(.star2)
                     .resizable()
                     .frame(width: 30, height: 30)
@@ -110,29 +105,21 @@ struct favorites: View {
                     .padding(.leading)
                     
                     .onTapGesture {
-                        //selectedMeal = Meal
                         showingSheet = true
                     }
                     .foregroundColor(CustomTeal.MyTeal)
                     .sheet(isPresented: $showingSheet) {
-                        FavoritesView(showingSheet: $showingSheet, favoritesList: $favoritesList /*, selectedMeal: $selectedPost*/)
+                        FavoritesView(showingSheet: $showingSheet, favoritesList: $favoritesList)
                     }
-                
-                //Spacer()
+     
             }
-            //Spacer()
         }
-        
-            
     }
 }
 
 struct BLDView : View
 {
     var body: some View{
-        
-        
-        //probably will pull from a list of todays meals
         VStack {
                 let today = Date()
                 let getDate = today.currentDate()
@@ -147,7 +134,7 @@ struct BLDView : View
                 RoundedRectangle(cornerSize: /*@START_MENU_TOKEN@*/CGSize(width: 20, height: 10)/*@END_MENU_TOKEN@*/)
                 
                     .frame(width: 300, height: 120)
-                    .foregroundColor(CustomGrey.MyGrey)//change to cutstom color
+                    .foregroundColor(CustomGrey.MyGrey)
                     .padding(.bottom)
                 Text("Breakfast")
                     .padding(.bottom)
@@ -159,7 +146,7 @@ struct BLDView : View
             ZStack{
                 RoundedRectangle(cornerSize: /*@START_MENU_TOKEN@*/CGSize(width: 20, height: 10)/*@END_MENU_TOKEN@*/)
                     .frame(width: 300, height: 120)
-                    .foregroundColor(CustomGrey.MyGrey)//change to cutstom color
+                    .foregroundColor(CustomGrey.MyGrey)
                     .padding(.vertical)
                     .padding(.bottom)
                 Text("Lunch")
@@ -172,7 +159,7 @@ struct BLDView : View
             ZStack{
                 RoundedRectangle(cornerSize: /*@START_MENU_TOKEN@*/CGSize(width: 20, height: 10)/*@END_MENU_TOKEN@*/)
                     .frame(width: 300, height: 120)
-                    .foregroundColor(CustomGrey.MyGrey)//change to cutstom color
+                    .foregroundColor(CustomGrey.MyGrey)
                 Text("Dinner")
                     .foregroundStyle(Color.white)
                 //.onTapGesture {
@@ -190,15 +177,9 @@ extension Color{
         static let thisTeal = Color("softTeal")
     }
 }
-//next step: get this function to only print month and day.
-// -- this func isnt working currently, it's formatted in this style in BLDView
 extension Date{
     func currentDate() -> String{
-        //let current = Date()
         let dateForm = DateFormatter()
-        //dateForm.dateFormat = "yyyy-MM-dd HH:mm:ss +zzzz"
-        //if let date = dateForm.date(from: currentDate){
-          //  let myDateFormat = DateFormatter()
         dateForm.dateFormat = "EEEE, MMMM d"
         return dateForm.string(from: self)
     }
@@ -206,18 +187,9 @@ extension Date{
 
 struct HomeContentView_Previews: PreviewProvider {
     static var previews: some View {
-        //HomeContentView()
-        //temp()
         swipeView()
     }
 }
-
-//Favorites tab -- star, will have functionality - modal sheet
-//APP Title
-//Breakfast area - rounded rectangle
-//Lunch area - rounded recctangle
-//Dinner area - rounded rectangle
-//nutrititonal bar area
 
 
 
