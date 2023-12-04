@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct HomeContentView: View {
+    @State private var swipeOffset: CGFloat = 0
     @State private var showingSheet = false
+    @State var StatSheetShowing = false
     @State var favoritesList: [Meal] = [
         Meal(name: "Meal 1", id: 1),
         Meal(name: "Meal 2", id: 2),
@@ -29,26 +31,63 @@ struct HomeContentView: View {
                         .padding(.vertical)
                     BLDView()
                 }
-                .toolbar{
-                    ToolbarItem(placement: .bottomBar){
-                        VStack{
-                            RoundedRectangle(cornerSize: CGSize(width: 20, height: 10))
-                                .frame(width: 100,height: 23)
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                        VStack {
+                            RoundedRectangle(cornerSize: CGSize(width: 200, height: 10))
+                                .frame(width: 100, height: 23)
                                 .foregroundStyle(CustomGrey.MyGrey)
+                                .gesture(
+                                    DragGesture()
+                                        .onChanged { value in
+                                            swipeOffset = value.translation.height
+                                        }
+                                        .onEnded { value in
+                                            if swipeOffset < -50 {
+                                                // Swipe-up gesture detected
+                                                StatSheetShowing.toggle()
+                                            }
+                                            swipeOffset = 0
+                                        }
+                                )
+                                .sheet(isPresented: $StatSheetShowing) {
+                                    StatSheet()
+                                        .background(Color.gray)
+                                }
                             Rectangle()
-                                    
-                                .frame(width: 40, height: 5)
+                                .frame(width: 60, height: 8)
                                 .foregroundColor(.gray)
                                 .cornerRadius(5)
-                                .padding(.vertical, 5)
                         }
                     }
                 }
             }
         }
-        
     }
-    
+//                .toolbar{
+//                    ToolbarItem(placement: .bottomBar){
+//                        VStack{
+//                            RoundedRectangle(cornerSize: CGSize(width: 20, height: 10))
+//                                .frame(width: 100,height: 23)
+//                                .foregroundStyle(CustomGrey.MyGrey)
+//                                .onTapGesture {
+//                                    StatSheetShowing.toggle()
+//                                }
+//                                .sheet(isPresented: $StatSheetShowing) {
+//                                    StatSheet()
+//                                        .background(CustomGrey.MyGrey)
+//                                }
+//                            Rectangle()
+//                                .frame(width: 40, height: 5)
+//                                .foregroundColor(.gray)
+//                                .cornerRadius(5)
+//                                .padding(.vertical, 5)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 struct swipeView: View
@@ -98,11 +137,11 @@ struct favorites: View {
                     .padding(.vertical)
                     .font(.system(size: 35))
                     .foregroundStyle(.white)
-                Image(.star2)
-                    .resizable()
-                    .frame(width: 30, height: 30)
-                    .padding(.leading)
-                    .padding(.leading)
+//                Image(.star)
+//                    .resizable()
+//                    .frame(width: 30, height: 30)
+//                    .padding(.leading)
+//                    .padding(.leading)
                     
                     .onTapGesture {
                         showingSheet = true
@@ -177,6 +216,13 @@ extension Color{
         static let thisTeal = Color("softTeal")
     }
 }
+
+extension Image {
+    struct myStar {
+        static let star = Image("star2")
+    }
+}
+
 extension Date{
     func currentDate() -> String{
         let dateForm = DateFormatter()
