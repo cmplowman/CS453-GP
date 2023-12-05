@@ -77,18 +77,18 @@ class WeeklyScreenViewModel: ObservableObject {
 // Model
 //
 //day object - contians day and 3 meal slots
-struct Day: Identifiable {
-    let id: Int
-    let dayOfWeek: Int
-    let name: String
+struct Day: Codable, Identifiable {
+    var id: Int?
+    var dayOfWeek: Int
+    var name: String
     var breakfast: fakeMeal?
     var lunch: fakeMeal?
     var dinner: fakeMeal?
 }
 
 //simple meal object
-struct fakeMeal: Identifiable, Equatable {
-    let id = UUID()
+struct fakeMeal: Codable, Identifiable, Equatable {
+    var id = UUID()
     var name: String
     var calories: Int
 }

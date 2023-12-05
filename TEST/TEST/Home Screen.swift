@@ -15,6 +15,7 @@ struct HomeContentView: View {
         Meal(name: "Meal 1", id: 1),
         Meal(name: "Meal 2", id: 2),
         Meal(name: "Meal 3", id: 3)]
+    @State var goalShowingSheet = false
 
     var body: some View {
         NavigationView{
@@ -26,7 +27,7 @@ struct HomeContentView: View {
                 CustomTeal.MyTeal
                     .ignoresSafeArea(edges: .top)
                 VStack{
-                    favorites(showingSheet: $showingSheet, favoritesList: $favoritesList)
+                    favorites(showingSheet: $showingSheet, favoritesList: $favoritesList, goalShowingSheet: <#Binding<Bool>#>)
                         .padding(.vertical)
                         .padding(.vertical)
                     BLDView()
@@ -64,32 +65,26 @@ struct HomeContentView: View {
             }
         }
     }
-//                .toolbar{
-//                    ToolbarItem(placement: .bottomBar){
-//                        VStack{
-//                            RoundedRectangle(cornerSize: CGSize(width: 20, height: 10))
-//                                .frame(width: 100,height: 23)
-//                                .foregroundStyle(CustomGrey.MyGrey)
-//                                .onTapGesture {
-//                                    StatSheetShowing.toggle()
-//                                }
-//                                .sheet(isPresented: $StatSheetShowing) {
-//                                    StatSheet()
-//                                        .background(CustomGrey.MyGrey)
-//                                }
-//                            Rectangle()
-//                                .frame(width: 40, height: 5)
-//                                .foregroundColor(.gray)
-//                                .cornerRadius(5)
-//                                .padding(.vertical, 5)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
-
+struct goalsView: View {
+    @Binding var goalShowingSheet: Bool
+    var body: some View {
+        VStack{
+            HStack{
+                Spacer()
+                    .padding(.all)
+                Button("X")
+                {
+                    goalShowingSheet.toggle()
+                }
+                .foregroundStyle(Color.gray)
+                .font(.system(size: 20))
+            }
+            Text("Meal Statistics")
+                .font(.system(size: 35))
+        }
+    }
+}
 struct swipeView: View
 {
     @State private var isViewVisible = false
@@ -125,10 +120,33 @@ struct swipeView: View
 struct favorites: View {
     @Binding var showingSheet: Bool
     @Binding var favoritesList: [Meal]
-
+    @Binding var goalShowingSheet: Bool
     var body: some View {
         VStack{
             HStack{
+                Button("G")
+                {
+                    goalShowingSheet.toggle()
+                }
+                .padding(.trailing)
+                .padding(.trailing)
+                .padding(.trailing)
+                .font(.system(size: 20))
+                 
+
+
+                Text("Meal Tracker")
+                    //.padding(.leading)
+                    //.padding(.leading)
+                    .padding(.leading)
+                    .padding(.trailing)
+                    .padding(.trailing)
+                    .padding(.trailing)
+                    .padding(.trailing)
+
+                    .padding(.vertical)
+                    .font(.system(size: 35))
+                    .foregroundStyle(.white)
                 
                 Text("Meal Tracker")
                     .padding(.leading)
@@ -229,7 +247,27 @@ extension Date{
         dateForm.dateFormat = "EEEE, MMMM d"
         return dateForm.string(from: self)
     }
+    func updateGoals(d: Day, goals: Int) -> Bool
+    {
+        let dateForm = DateFormatter()
+        dateForm.dateFormat = ""
+        let cal = Calendar.current
+        let components = cal.dateComponents([.day, .hour, .minute, .second], from: Date())
+        
+        if let hour = components.hour, let minutues = components.minute, let seconds = components.second
+        {
+            if hour == 0  && minutues == 0 && seconds == 0 //
+            {
+                return true
+            }
+        }
+        return false
+    }
+    
 }
+    
+    
+
 
 struct HomeContentView_Previews: PreviewProvider {
     static var previews: some View {
