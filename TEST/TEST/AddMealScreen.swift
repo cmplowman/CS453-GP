@@ -57,6 +57,32 @@ struct AddMealScreen: View {
                         Button("Show Nutritional Values") {
                             viewModel.getNutrition(query: viewModel.query)
                         }
+                        List {
+                            ForEach(viewModel.foods) { food in
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text("\(food.name)")
+                                            .font(.title)
+                                            .padding(.bottom)
+                                    }
+                                    .minimumScaleFactor(0.01)
+                                    Spacer()
+                                    VStack(alignment: .leading) {
+                                        Text("Serving Size: \(String(format: "%.1f", food.serving_size_g))g")
+                                        Text("Total Fat: \(String(format: "%.1f", food.fat_total_g))g")
+                                        Text("Saturated Fat: \(String(format: "%.1f", food.fat_saturated_g))g")
+                                        Text("Protein: \(String(format: "%.1f", food.protein_g))g")
+                                        Text("Sodium: \(String(format: "%.1f", food.sodium_mg)) mg")
+                                        Text("Potassium: \(String(format: "%.1f", food.potassium_mg))mg")
+                                        Text("Cholesterol: \(String(format: "%.1f", food.cholesterol_mg))mg")
+                                        Text("Carbohydrates: \(String(format: "%.1f", food.carbohydrates_total_g))g")
+                                        Text("Fiber: \(String(format: "%.1f", food.fiber_g))g")
+                                        Text("Sugar: \(String(format: "%.1f", food.sugar_g))g")
+                                    }
+                                }
+                                .padding()
+                            }
+                        }
                     }
                     
                     .background(CustomTeal.MyTeal)
@@ -69,32 +95,7 @@ struct AddMealScreen: View {
                             dismissButton: .cancel())
                     }
                     
-                    List {
-                        ForEach(viewModel.foods) { food in
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text("\(food.name)")
-                                        .font(.title)
-                                        .padding(.bottom)
-                                }
-                                .minimumScaleFactor(0.01)
-                                Spacer()
-                                VStack(alignment: .leading) {
-                                    Text("Serving Size: \(String(format: "%.1f", food.serving_size_g))g")
-                                    Text("Total Fat: \(String(format: "%.1f", food.fat_total_g))g")
-                                    Text("Saturated Fat: \(String(format: "%.1f", food.fat_saturated_g))g")
-                                    Text("Protein: \(String(format: "%.1f", food.protein_g))g")
-                                    Text("Sodium: \(String(format: "%.1f", food.sodium_mg)) mg")
-                                    Text("Potassium: \(String(format: "%.1f", food.potassium_mg))mg")
-                                    Text("Cholesterol: \(String(format: "%.1f", food.cholesterol_mg))mg")
-                                    Text("Carbohydrates: \(String(format: "%.1f", food.carbohydrates_total_g))g")
-                                    Text("Fiber: \(String(format: "%.1f", food.fiber_g))g")
-                                    Text("Sugar: \(String(format: "%.1f", food.sugar_g))g")
-                                }
-                            }
-                            .padding()
-                        }
-                    }
+                    
                     
                     Spacer()
                     
