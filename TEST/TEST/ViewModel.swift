@@ -32,6 +32,17 @@ struct Day: Codable, Identifiable {
     var dinner: Food?
 }
 
+struct Meal: Codable {
+    var dayID: Int
+    var mealTime: Int
+    var mealType: MealType
+    var food: Food?
+}
+
+enum MealType: String, Codable {
+    case breakfast, lunch, dinner
+}
+
 
 class ApiViewModel: ObservableObject {
     @Published var foods = [Food]()
@@ -76,13 +87,13 @@ class ApiViewModel: ObservableObject {
     @Published var favoritesList: [Food] //Connects to list in favorites
     @Published var weekDay: [Day] //Connects Weekly Screen list
     @Published var aDay: Day
-//    @Published var wholeDay: WeeklyScreen.MealView
+//    @Published var wholeDay: Day
     
     private let thisFood: String = "food"
     private let fav: String = "favorites"
     private let thisDay: String = "today"
     private let mealList: String = "meals"
-//    private let wholeDayList: String = "mealView"
+    private let wholeDayList: String = "todaysMeals"
 
     func loadData(query: String, completion: @escaping ([Food]) -> ()) {
         print("\(query)")
@@ -274,7 +285,7 @@ class ApiViewModel: ObservableObject {
             weekDay[dayNum].breakfast = newBreakfast
             saveMeal()
             saveWeek()
-        
+            saveDay()
     }
        
     /*
@@ -287,6 +298,7 @@ class ApiViewModel: ObservableObject {
           weekDay[dayNum].lunch = newLunch
         saveMeal()
         saveWeek()
+        saveDay()
     }
        
     /*
@@ -299,6 +311,7 @@ class ApiViewModel: ObservableObject {
         weekDay[dayNum].dinner = newDinner
         saveMeal()
         saveWeek()
+        saveDay()
     }
     /*
         removes meal from week list.
@@ -343,12 +356,16 @@ class ApiViewModel: ObservableObject {
     
     }
     
-//    func saveDay()
-//    {
-//        do{
-//            try UserDefaults.standard.setCodable(wholeDay, forKey: wholeDayList)
-//        }
-//    }
+
+    
+    func saveDay()
+    {
+        do{
+            try UserDefaults.standard.setCodable(aDay, forKey: wholeDayList)
+        }catch{
+            print("error saving this day")
+        }
+    }
     
     func updateMeal(forDayID dayID: Int, mealType: MealType, withMeal meal: Food) {
         print("in updateMeal")

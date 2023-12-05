@@ -68,9 +68,9 @@ class WeeklyScreenViewModel: ObservableObject {
 // Model
 //
 //day object - contians day and 3 meal slots
-enum MealType {
-    case breakfast, lunch, dinner
-}
+//enum MealType {
+//    case breakfast, lunch, dinner
+//}
 
 
 
@@ -89,6 +89,27 @@ struct WeeklyScreen: View {
     @State private var currentDayID = 0
     @State private var currentMealSlot: MealType = .breakfast
     
+    @State var week: [WeeklyScreen.MealView]
+
+        init(viewModel: ApiViewModel) {
+            self.viewModel = viewModel
+            self._week = State(initialValue: (0...6).map { dayIndex in
+                WeeklyScreen.MealView(
+                    viewModel: viewModel,
+                    dayID: dayIndex,
+                    mealTime: 1, // or appropriate value for mealTime
+                    mealType: .breakfast, // or .lunch, .dinner based on your need
+                    meal: nil, // or appropriate Food object
+                    addMealAction: {
+                        // Define action for adding a meal
+                    },
+                    showMealDetailsAction: { food in
+                        // Define action for showing meal details
+                    }
+                )
+            })
+        }
+
     
     var body: some View {
         VStack {
@@ -102,21 +123,21 @@ struct WeeklyScreen: View {
                     //Day
                     HStack {
                         //breakfast
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 1, mealType: .breakfast, meal: day.breakfast,
+                        MealView(viewModel: viewModel, dayID: day.dayOfWeek, mealTime: 1, mealType: .breakfast, meal: day.breakfast,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
                             self.showingMealDetails = true
                         })
                         //lunch
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 2, mealType: .lunch, meal: day.lunch,
+                        MealView(viewModel: viewModel, dayID: day.dayOfWeek, mealTime: 2, mealType: .lunch, meal: day.lunch,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
                             self.showingMealDetails = true
                         })
                         //dinner
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 3, mealType: .dinner, meal: day.dinner,
+                        MealView(viewModel: viewModel, dayID: day.dayOfWeek, mealTime: 3, mealType: .dinner, meal: day.dinner,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
@@ -147,7 +168,6 @@ struct WeeklyScreen: View {
     // MealView component - the buttons
     struct MealView: View  {
         @ObservedObject var viewModel: ApiViewModel
-        @Binding var plsStop: Bool
         var dayID: Int
         var mealTime: Int
         let mealType: MealType

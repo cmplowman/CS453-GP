@@ -12,10 +12,10 @@ struct HomeContentView: View {
     @State private var swipeOffset: CGFloat = 0
     @State private var showingSheet = false
     @State var StatSheetShowing = false
-    @State var favoritesList: [Meal] = [
-        Meal(name: "Meal 1", id: 1),
-        Meal(name: "Meal 2", id: 2),
-        Meal(name: "Meal 3", id: 3)]
+//    @State var favoritesList: [Meal] = [
+//        Meal(name: "Meal 1", id: 1),
+//        Meal(name: "Meal 2", id: 2),
+//        Meal(name: "Meal 3", id: 3)]
     @State var goalShowingSheet = false
 
     var body: some View {
@@ -30,7 +30,7 @@ struct HomeContentView: View {
                 VStack{
                     
                     
-                    favorites(showingSheet: $showingSheet, favoritesList: $favoritesList, goalShowingSheet: $goalShowingSheet)
+                    favorites(showingSheet: $showingSheet, goalShowingSheet: $goalShowingSheet)
                         .padding(.vertical)
                         .padding(.vertical)
                     BLDView()
@@ -135,7 +135,7 @@ struct swipeView: View
 
 struct favorites: View {
     @Binding var showingSheet: Bool
-    @Binding var favoritesList: [Meal]
+//    @Binding var favoritesList: [Meal]
     @Binding var goalShowingSheet: Bool
     var body: some View {
         VStack{
@@ -159,7 +159,7 @@ struct favorites: View {
                     }
                     .foregroundColor(CustomTeal.MyTeal)
                     .sheet(isPresented: $showingSheet) {
-                        FavoritesView(showingSheet: $showingSheet, favoritesList: $favoritesList)
+                        FavoritesView(showingSheet: $showingSheet, viewModel: ApiViewModel())
                     }
      
             }
