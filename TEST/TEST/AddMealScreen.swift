@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AddMealScreen: View {
     @ObservedObject var viewModel: ApiViewModel
-    //@Binding var showingAddMeal: Bool
+    @Binding var showingAddMeal: Bool
 //    @Binding var plsStop: Bool
    // @Binding var currentDayID: Int
     //@Binding var currentMealSlot: MealType
@@ -141,22 +141,27 @@ struct AddMealScreen: View {
                     //add meal button
                     Button {
                         let food = viewModel.combineFoods()
-                        let dayOfWeek = viewModel.aDay.dayOfWeek
-                        let timeOfDay = viewModel.aDay
-                        //if it is breakfast
-//                        if timeOfDay == "breakfast"
-//                        {
-//                            viewModel.addBreakfast(f: food, dayNum: dayOfWeek)
-//                        }
-//                        else if timeOfDay == "lunch"
-//                        {
-//                            viewModel.addLunch(f: food, dayNum: dayOfWeek)
-//                        }
-//                        else if timeOfDay == "dinner"
-//                        {
-//                            viewModel.addDinner(f: food, dayNum: dayOfWeek)
-//                        }
-
+                        let dayOfWeek = viewModel.dayOfWeek
+                        let timeOfDay = viewModel.time
+                        print("DOW: \(dayOfWeek)")
+                        print(viewModel.dayOfWeek)
+                        print("TOD: \(timeOfDay)")
+                        print(viewModel.time)
+                        
+//                        if it is breakfast
+                        if timeOfDay == 1
+                        {
+                            viewModel.addBreakfast(f: food, dayNum: dayOfWeek)
+                        }
+                        else if timeOfDay == 2
+                        {
+                            viewModel.addLunch(f: food, dayNum: dayOfWeek)
+                        }
+                        else if timeOfDay == 3
+                        {
+                            viewModel.addDinner(f: food, dayNum: dayOfWeek)
+                        }
+                        showingAddMeal.toggle()
                         
                     } label: {
                         Label("Add Meal", systemImage: "fork.knife.circle.fill")
@@ -175,8 +180,8 @@ struct AddMealScreen: View {
     }
 }
 
-struct AddMealScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        AddMealScreen(viewModel: ApiViewModel())
-    }
-}
+//struct AddMealScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddMealScreen(viewModel: ApiViewModel())
+//    }
+//}

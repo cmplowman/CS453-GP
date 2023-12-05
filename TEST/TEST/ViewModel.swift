@@ -34,10 +34,12 @@ struct Day: Codable, Identifiable {
 
 
 class ApiViewModel: ObservableObject {
-    @Published var week: [Day]
     @Published var foods = [Food]()
     @Published var selectedMeal: Food? //noot
     @Published var query: String = ""
+    
+    @Published var time: Int
+    @Published var dayOfWeek: Int
     
     @Published var weeklyCals = 12.0
     @Published var weeklyFats = 13.0
@@ -74,11 +76,13 @@ class ApiViewModel: ObservableObject {
     @Published var favoritesList: [Food] //Connects to list in favorites
     @Published var weekDay: [Day] //Connects Weekly Screen list
     @Published var aDay: Day
+//    @Published var wholeDay: WeeklyScreen.MealView
     
     private let thisFood: String = "food"
     private let fav: String = "favorites"
     private let thisDay: String = "today"
     private let mealList: String = "meals"
+//    private let wholeDayList: String = "mealView"
 
     func loadData(query: String, completion: @escaping ([Food]) -> ()) {
         print("\(query)")
@@ -148,7 +152,9 @@ class ApiViewModel: ObservableObject {
             aDay = Day(id: 0, dayOfWeek: 0, name: "")
         }
         
-        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: ApiViewModel.dayName(for: $0)) }
+        weekDay = (0...6).map { Day(id: $0, dayOfWeek: $0, name: ApiViewModel.dayName(for: $0)) }
+        time = 0
+        dayOfWeek = 0
     }
     
     static func dayName(for dayOfWeek: Int) -> String {
@@ -157,18 +163,18 @@ class ApiViewModel: ObservableObject {
     
     //removes each of the meals in given day
     private func resetDayMeals(day: Int){
-        for i in 0..<week.count{
+        for i in 0..<weekDay.count{
             if(i==day){
-                week[day].breakfast = nil
-                week[day].lunch = nil
-                week[day].dinner = nil
+                weekDay[day].breakfast = nil
+                weekDay[day].lunch = nil
+                weekDay[day].dinner = nil
             }
         }
     }
         
     //removes every meal in every day of the week
     private func resetWeekMeals(){
-        for i in 0..<week.count{
+        for i in 0..<weekDay.count{
             resetDayMeals(day: i)
         }
     }
@@ -263,10 +269,12 @@ class ApiViewModel: ObservableObject {
     */
     func addBreakfast(f: Food, dayNum: Int)
     {
-        let newBreakfast = Food(name: f.name, calories: f.calories, serving_size_g: f.serving_size_g, fat_total_g: f.fat_total_g, fat_saturated_g: f.fat_saturated_g, protein_g: f.protein_g, sodium_mg: f.sodium_mg, potassium_mg: f.potassium_mg, cholesterol_mg: f.cholesterol_mg, carbohydrates_total_g: f.cholesterol_mg, fiber_g: f.fiber_g, sugar_g: f.sugar_g)
-          weekDay[dayNum].breakfast = newBreakfast
-          saveMeal()
-          saveWeek()
+//        let newNum = dayNum-1
+         let newBreakfast = Food(name: f.name, calories: f.calories, serving_size_g: f.serving_size_g, fat_total_g: f.fat_total_g, fat_saturated_g: f.fat_saturated_g, protein_g: f.protein_g, sodium_mg: f.sodium_mg, potassium_mg: f.potassium_mg, cholesterol_mg: f.cholesterol_mg, carbohydrates_total_g: f.cholesterol_mg, fiber_g: f.fiber_g, sugar_g: f.sugar_g)
+            weekDay[dayNum].breakfast = newBreakfast
+            saveMeal()
+            saveWeek()
+        
     }
        
     /*
@@ -274,6 +282,7 @@ class ApiViewModel: ObservableObject {
     */
     func addLunch(f: Food, dayNum: Int)
     {
+//        let newNum = dayNum-1
         let newLunch = Food(name: f.name, calories: f.calories, serving_size_g: f.serving_size_g, fat_total_g: f.fat_total_g, fat_saturated_g: f.fat_saturated_g, protein_g: f.protein_g, sodium_mg: f.sodium_mg, potassium_mg: f.potassium_mg, cholesterol_mg: f.cholesterol_mg, carbohydrates_total_g: f.cholesterol_mg, fiber_g: f.fiber_g, sugar_g: f.sugar_g)
           weekDay[dayNum].lunch = newLunch
         saveMeal()
@@ -285,6 +294,7 @@ class ApiViewModel: ObservableObject {
     */
     func addDinner(f: Food, dayNum: Int)
     {
+//        let newNum = dayNum-1
         let newDinner = Food(name: f.name, calories: f.calories, serving_size_g: f.serving_size_g, fat_total_g: f.fat_total_g, fat_saturated_g: f.fat_saturated_g, protein_g: f.protein_g, sodium_mg: f.sodium_mg, potassium_mg: f.potassium_mg, cholesterol_mg: f.cholesterol_mg, carbohydrates_total_g: f.cholesterol_mg, fiber_g: f.fiber_g, sugar_g: f.sugar_g)
         weekDay[dayNum].dinner = newDinner
         saveMeal()
@@ -333,21 +343,28 @@ class ApiViewModel: ObservableObject {
     
     }
     
+//    func saveDay()
+//    {
+//        do{
+//            try UserDefaults.standard.setCodable(wholeDay, forKey: wholeDayList)
+//        }
+//    }
+    
     func updateMeal(forDayID dayID: Int, mealType: MealType, withMeal meal: Food) {
         print("in updateMeal")
         print(meal)
-        guard let index = week.firstIndex(where: { $0.id == dayID }) else { return }
+        guard let index = weekDay.firstIndex(where: { $0.id == dayID }) else { return }
         print("past guard")
         switch mealType {
         case .breakfast:
             print("update for B")
-            week[index].breakfast = meal
+            weekDay[index].breakfast = meal
         case .lunch:
             print("update for L")
-            week[index].lunch = meal
+            weekDay[index].lunch = meal
         case .dinner:
             print("update for D")
-            week[index].dinner = meal
+            weekDay[index].dinner = meal
         }
     }
 

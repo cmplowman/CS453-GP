@@ -29,11 +29,21 @@ class WeeklyScreenViewModel: ObservableObject {
     
     //initializer
     init() {
-        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) } //take out when have proper adding
+        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) }
     }
     private static func dayName(for dayOfWeek: Int) -> String {
         ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]
     }
+//    private static func setDayOfWeek(week : [Day]){
+//        ForEach(week) { day in
+//            switch(day.MealType){
+//            case .breakfast: day.time = 1
+//            case .lunch: day.time = 2
+//            case .dinner: day.time = 3
+//            }
+//            print(day.time)
+//        }
+//    }
     
     //
 //    func updateMeal(for dayOfWeek: Int, meal: fakeMeal, type: MealType) {
@@ -84,7 +94,7 @@ struct WeeklyScreen: View {
         VStack {
             Text("Week").font(.largeTitle)
             //loops through each day in the week
-            List(viewModel.week) { day in
+            List(viewModel.weekDay) { day in
                 VStack(alignment: .leading) {
                     Text(day.name).font(.title)
                         .foregroundColor(Color.black)
@@ -92,26 +102,26 @@ struct WeeklyScreen: View {
                     //Day
                     HStack {
                         //breakfast
-//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .breakfast, meal: day.breakfast,
-//                                 addMealAction: { self.showingAddMeal = true },
-//                                 showMealDetailsAction: { meal in
-//                            self.selectedMeal = meal
-//                            self.showingMealDetails = true
-//                        })
-//                        //lunch
-//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.lunch,
-//                                 addMealAction: { self.showingAddMeal = true },
-//                                 showMealDetailsAction: { meal in
-//                            self.selectedMeal = meal
-//                            self.showingMealDetails = true
-//                        })
-//                        //dinner
-//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.dinner,
-//                                 addMealAction: { self.showingAddMeal = true },
-//                                 showMealDetailsAction: { meal in
-//                            self.selectedMeal = meal
-//                            self.showingMealDetails = true
-//                        })
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 1, mealType: .breakfast, meal: day.breakfast,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
+                        //lunch
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 2, mealType: .lunch, meal: day.lunch,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
+                        //dinner
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealTime: 3, mealType: .dinner, meal: day.dinner,
+                                 addMealAction: { self.showingAddMeal = true },
+                                 showMealDetailsAction: { meal in
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
                         
                         
                     }
@@ -122,26 +132,29 @@ struct WeeklyScreen: View {
         //opens meal details view
         .sheet(isPresented: $showingMealDetails, onDismiss: { self.selectedMeal = nil }) {
             if let meal = selectedMeal {
-                MealDetailsView(meal: meal)
+                MealDetailsView(meal: meal, viewModel: viewModel)
             }
         }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-//            AddMealScreen(viewModel: ApiViewModel(), showingAddMeal: $showingAddMeal, plsStop: $plsStop, currentDayID: $currentDayID, currentMealSlot: $currentMealSlot)
+            AddMealScreen(viewModel: viewModel, showingAddMeal: $showingAddMeal)
 
         }
     }
+    //, showingAddMeal: $showingAddMeal, plsStop: $plsStop, currentDayID: $currentDayID, currentMealSlot: $currentMealSlot
     
     
     // MealView component - the buttons
-    struct MealView: View {
+    struct MealView: View  {
         @ObservedObject var viewModel: ApiViewModel
         @Binding var plsStop: Bool
         var dayID: Int
+        var mealTime: Int
         let mealType: MealType
         var meal: Food?
         var addMealAction: () -> Void
         var showMealDetailsAction: (Food) -> Void
+        
        // var dayID: Int
     
         
@@ -178,9 +191,16 @@ struct WeeklyScreen: View {
                     //                    )
                                         Button(action: {
                                             // First, perform the addMealAction, if it has additional functionality.
+                                            viewModel.time = mealTime
+                                            viewModel.dayOfWeek = dayID
+                                            print("mealtime: \(mealTime)")
+                                            print("VMtime: \(viewModel.time)")
+                                            print("dayID: \(dayID)")
+                                            print("VMDOW: \(viewModel.dayOfWeek)")
                                             print("pressed add button")
                                             addMealAction()
                                             print("meal action over")
+                                            
                     //                        while(plsStop==true){
                     //                            if(plsStop==false){
                     //                                if let selectedMeal = viewModel.selectedMeal {
@@ -243,11 +263,37 @@ struct WeeklyScreen: View {
     // MealDetailsView for showing the details of a selected meal
     struct MealDetailsView: View {
         var meal: Food?
+        @ObservedObject var viewModel: ApiViewModel
         var body: some View {
-            if let meal = meal {
-                Text("Meal details: \(meal.name), \(meal.calories) calories")
-            } else {
-                Text("No meal details available")
+//            if let meal = meal {
+//                Text("Meal details: \(meal.name), \(meal.calories) calories")
+//            } else {
+//                Text("No meal details available")
+//            }
+            List {
+                ForEach(viewModel.foods) { food in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("\(food.name.prefix(1).capitalized + food.name.dropFirst())")                                            .font(.title)
+                                .padding(.bottom)
+                        }
+                        .minimumScaleFactor(0.01)
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            Text("Serving Size: \(String(format: "%.1f", food.serving_size_g))g")
+                            Text("Total Fat: \(String(format: "%.1f", food.fat_total_g))g")
+                            Text("Saturated Fat: \(String(format: "%.1f", food.fat_saturated_g))g")
+                            Text("Protein: \(String(format: "%.1f", food.protein_g))g")
+                            Text("Sodium: \(String(format: "%.1f", food.sodium_mg)) mg")
+                            Text("Potassium: \(String(format: "%.1f", food.potassium_mg))mg")
+                            Text("Cholesterol: \(String(format: "%.1f", food.cholesterol_mg))mg")
+                            Text("Carbohydrates: \(String(format: "%.1f", food.carbohydrates_total_g))g")
+                            Text("Fiber: \(String(format: "%.1f", food.fiber_g))g")
+                            Text("Sugar: \(String(format: "%.1f", food.sugar_g))g")
+                        }
+                    }
+                    .padding()
+                }
             }
         }
     }
