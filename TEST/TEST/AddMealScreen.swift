@@ -9,50 +9,34 @@ import SwiftUI
 
 struct AddMealScreen: View {
     @ObservedObject var viewModel: ApiViewModel
-    @State var pickerSelection: testMeal
-    @State var favoriteSelection: testMeal
-    @State var query: String = ""
-    @State var favoritedMeals: [testMeal] = []
-    @State var addedMeal: [testMeal] = []
+    @State var favoritedMeals: [Food] = []
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
-
-    var selectedMeals: [String] = []
-    var mealsExample:[testMeal] = [
-        testMeal(name: "Pasta", id: 1, calories: 500),
-        testMeal(name: "Pizza", id: 2, calories: 700),
-        testMeal(name: "Salad", id: 3, calories: 300),
-        testMeal(name: "Chicken", id: 4, calories: 200),
-        testMeal(name: "Tacos", id: 5, calories: 300),
-        testMeal(name: "Soup", id: 6, calories: 150),
-        testMeal(name: "Custom Meal", id: 7, calories: 0),
-        testMeal(name: "Favorites", id: 8, calories: 0)
-    ]
+    @State var choice: [String] = ["Custom Meal", "Favorites"]
+    @State var pickerSelection = "Custom Meal"
+    @State var favoriteSelection = ""
+    
+    
     var body: some View {
         NavigationView{
             ZStack{
-                CustomTeal.MyTeal  
+                CustomTeal.MyTeal
                 VStack {
                     Form{
-                        Picker(selection: $pickerSelection, label: Text("Choose Meal"), content: {
+                        Picker(selection: $pickerSelection, label: Text("Select Meal"), content: {
                             
-                            ForEach(mealsExample) { meal in
-                                Text(meal.name).tag(meal)
+                            ForEach(choice, id: \.self) { choice in
+                                Text(choice)
                             }
                         })
                         
-                        if pickerSelection.name == "Custom Meal"
+                        if pickerSelection == "Custom Meal"
                         {
-                            TextField("Custom Meal", text: $query)
-                            
-                            Button("Get Nutritional Values") {
-                                viewModel.getNutrition(query: query)
-                            }
+                            TextField("Custom Meal", text: $viewModel.query)
                             
                         }
-                        
-                        else if pickerSelection.name == "Favorites"
-                        {
+                        else{
+                            
                             if favoritedMeals.isEmpty
                             {
                                 Button("Show Alert")
@@ -61,16 +45,20 @@ struct AddMealScreen: View {
                                 }
                                 
                             }
-                            else {
-                                Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
-                                    
-                                    ForEach(favoritedMeals) { meal in
-                                        Text(meal.name).tag(meal)
-                                    }
-                                })
-                            }
+                            //                            else {
+                            //                                Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
+                            //
+                            //                                    ForEach(favoritedMeals) { meal in
+                            //                                        Text(meal.name).tag(meal)
+                            //                                    }
+                            //                                })
+                            //                            }
+                        }
+                        Button("Show Nutritional Values") {
+                            viewModel.getNutrition(query: viewModel.query)
                         }
                     }
+                    
                     .background(CustomTeal.MyTeal)
                     .scrollContentBackground(.hidden)
                     .alert(isPresented: $showingAlert1) {
@@ -80,26 +68,39 @@ struct AddMealScreen: View {
                             message: Text("You have no favorites. Favorite a meal to see them here."),
                             dismissButton: .cancel())
                     }
-                       
-                    //favorite button
-                    Button{
-                        if !query.isEmpty {
-                            //                        if favoritedMeals.contains(customMeal) {
-                            //                            showingAlert2.toggle()
-                            //                        } else {
-                            //                            favoritedMeals.append(customMeal)
-                            //                        }
-                        } else if pickerSelection.name == "Custom Meal" && query.isEmpty {
-                            // Do nothing
-                        } else if pickerSelection.name == "Favorites" {
-                            showingAlert2.toggle()
-                        } else {
-                            if favoritedMeals.contains(pickerSelection) {
-                                showingAlert2.toggle()
-                            } else {
-                                favoritedMeals.append(pickerSelection)
+                    
+                    List {
+                        ForEach(viewModel.foods) { food in
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text("\(food.name)")
+                                        .font(.title)
+                                        .padding(.bottom)
+                                }
+                                .minimumScaleFactor(0.01)
+                                Spacer()
+                                VStack(alignment: .leading) {
+                                    Text("Serving Size: \(String(format: "%.1f", food.serving_size_g))g")
+                                    Text("Total Fat: \(String(format: "%.1f", food.fat_total_g))g")
+                                    Text("Saturated Fat: \(String(format: "%.1f", food.fat_saturated_g))g")
+                                    Text("Protein: \(String(format: "%.1f", food.protein_g))g")
+                                    Text("Sodium: \(String(format: "%.1f", food.sodium_mg)) mg")
+                                    Text("Potassium: \(String(format: "%.1f", food.potassium_mg))mg")
+                                    Text("Cholesterol: \(String(format: "%.1f", food.cholesterol_mg))mg")
+                                    Text("Carbohydrates: \(String(format: "%.1f", food.carbohydrates_total_g))g")
+                                    Text("Fiber: \(String(format: "%.1f", food.fiber_g))g")
+                                    Text("Sugar: \(String(format: "%.1f", food.sugar_g))g")
+                                }
                             }
+                            .padding()
                         }
+                    }
+                    
+                    Spacer()
+                    
+                    //favorite button
+                    Button {
+        
                         
                     } label: {
                         Label("Favorite", systemImage: "star.fill")
@@ -122,22 +123,25 @@ struct AddMealScreen: View {
                     
                     //add meal button
                     Button {
-                        if query != ""
-                        {
-                            //addedMeal.append(customMeal)
-                        }
-                        else if pickerSelection.name == "Favorites"
-                        {
-                            // addedMeal.append(favoriteSelection)
-                        }
-                        else if pickerSelection.name == "Custom Meal" && query.isEmpty
-                        {
-                            //Do nothing
-                        }
-                        else
-                        {
-                            addedMeal.append(pickerSelection)
-                        }
+                        
+                        // send food obj to weekly screen here
+                        
+                        //                        if query != ""
+                        //                        {
+                        //                            //addedMeal.append(customMeal)
+                        //                        }
+                        //                        else if pickerSelection.name == "Favorites"
+                        //                        {
+                        //                            // addedMeal.append(favoriteSelection)
+                        //                        }
+                        //                        else if pickerSelection.name == "Custom Meal" && query.isEmpty
+                        //                        {
+                        //                            //Do nothing
+                        //                        }
+                        //                        else
+                        //                        {
+                        //                            addedMeal.append(pickerSelection)
+                        //                        }
                         
                     } label: {
                         Label("Add Meal", systemImage: "fork.knife.circle.fill")
@@ -148,7 +152,7 @@ struct AddMealScreen: View {
                     .foregroundColor(CustomTeal.MyTeal)
                     .tint(.white)
                     .controlSize(.large)
-                    .background(CustomTeal.MyTeal)
+                    .background(CustomTeal.MyTeal).frame(width: .infinity)
                 }
                 .navigationTitle("Add Meal")
             }
@@ -156,17 +160,8 @@ struct AddMealScreen: View {
     }
 }
 
-
-//Test Model
-
-struct testMeal: Identifiable, Hashable {
-    let name: String
-    let id: Int
-    let calories: Int
-}
-
 struct AddMealScreen_Previews: PreviewProvider {
     static var previews: some View {
-        AddMealScreen(viewModel: ApiViewModel(), pickerSelection: testMeal(name: "Candy", id: 9, calories: 700), favoriteSelection: testMeal(name: "Candy", id: 9, calories: 700))
+        AddMealScreen(viewModel: ApiViewModel())
     }
 }

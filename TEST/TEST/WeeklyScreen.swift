@@ -106,11 +106,11 @@ enum MealType {
 //
 //Week Screen
 struct WeeklyScreen: View {
-    @ObservedObject var viewModel: WeeklyScreenViewModel
+    @ObservedObject var viewModel: ApiViewModel
     @State private var showingAddMeal = false
     @State private var showingMealDetails = false
-    @State private var selectedMeal: fakeMeal?
-
+    @State private var selectedMeal: Food?
+    
     var body: some View {
         VStack {
             Text("Week").font(.largeTitle)
@@ -126,134 +126,129 @@ struct WeeklyScreen: View {
                         MealView(mealType: .breakfast, meal: day.breakfast,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
-                                    self.selectedMeal = meal
-                                    self.showingMealDetails = true
-                                 })
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
                         //lunch
                         MealView(mealType: .lunch, meal: day.lunch,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
-                                    self.selectedMeal = meal
-                                    self.showingMealDetails = true
-                                 })
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
                         //dinner
                         MealView(mealType: .dinner, meal: day.dinner,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
-                                    self.selectedMeal = meal
-                                    self.showingMealDetails = true
-                                 })
+                            self.selectedMeal = meal
+                            self.showingMealDetails = true
+                        })
                         
                         
                     }
                 }
             }
         }
-
+        
         //opens meal details view
         .sheet(isPresented: $showingMealDetails, onDismiss: { self.selectedMeal = nil }) {
-                    if let meal = selectedMeal {
-                        MealDetailsView(meal: meal)
-                    }
-                }
+            if let meal = selectedMeal {
+                MealDetailsView(meal: meal)
+            }
+        }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-            AddMealScreen(viewModel: ApiViewModel(), pickerSelection: testMeal(name: "Candy", id: 9, calories: 700), favoriteSelection: testMeal(name: "Candy", id: 9, calories: 700))
-                }
-        //updates the meal being passed each time the current time is changed
-        .onChange(of: selectedMeal) { _ in
-                    self.showingMealDetails = (self.selectedMeal != nil)
-                }
+
+        }
     }
-}
-
-
-// MealView component - the buttons
-struct MealView: View {
-    let mealType: MealType
-    var meal: fakeMeal?
-    var addMealAction: () -> Void
-    var showMealDetailsAction: (fakeMeal) -> Void
     
-    var body: some View {
-        VStack {
-            Text(mealTypeTitle) //B,L,D
-                .foregroundColor(CustomTeal.MyTeal)
-            
-            //check if theres a meal in the slot
-            if let meal = meal {
-                //has meal
-                Button(action: { showMealDetailsAction(meal) }) {
-                    Text(meal.name)
-                        .foregroundColor(CustomTeal.MyTeal)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(CustomGrey.MyGrey.opacity(0.6))
+    
+    // MealView component - the buttons
+    struct MealView: View {
+        let mealType: MealType
+        var meal: Food?
+        var addMealAction: () -> Void
+        var showMealDetailsAction: (Food) -> Void
+        
+        var body: some View {
+            VStack {
+                Text(mealTypeTitle) //B,L,D
+                    .foregroundColor(CustomTeal.MyTeal)
+                
+                //check if theres a meal in the slot
+                if let meal = meal {
+                    //has meal
+                    Button(action: { showMealDetailsAction(meal) }) {
+                        Text(meal.name)
+                            .foregroundColor(CustomTeal.MyTeal)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(CustomGrey.MyGrey.opacity(0.6))
                     )
-            } else {
-                //no meal
-                Button(action: addMealAction) {
-                    Image(systemName: "plus")
-                        .foregroundColor(CustomTeal.MyTeal)
-                }
-                .buttonStyle(PlainButtonStyle())
-                .padding()
-                .background(
-                    RoundedRectangle(cornerRadius: 5)
-                        .fill(CustomGrey.MyGrey.opacity(0.6))
+                } else {
+                    //no meal
+                    Button(action: addMealAction) {
+                        Image(systemName: "plus")
+                            .foregroundColor(CustomTeal.MyTeal)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .padding()
+                    .background(
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(CustomGrey.MyGrey.opacity(0.6))
                     )
+                }
+            }
+        }
+        
+        
+        
+        //displays name of meal slot
+        private var mealTypeTitle: String {
+            switch mealType {
+            case .breakfast:
+                return "Breakfast"
+            case .lunch:
+                return "Lunch"
+            case .dinner:
+                return "Dinner"
             }
         }
     }
     
     
     
-    //displays name of meal slot
-    private var mealTypeTitle: String {
-        switch mealType {
-        case .breakfast:
-            return "Breakfast"
-        case .lunch:
-            return "Lunch"
-        case .dinner:
-            return "Dinner"
+    
+    
+    
+    // AddMealView for adding a new meal
+    struct AddMealView: View {
+        //    var meal: fakeMeal?
+        var body: some View {
+            Text("Add a new meal")
+        }
+    }
+    
+    
+    // MealDetailsView for showing the details of a selected meal
+    struct MealDetailsView: View {
+        var meal: Food?
+        var body: some View {
+            if let meal = meal {
+                Text("Meal details: \(meal.name), \(meal.calories) calories")
+            } else {
+                Text("No meal details available")
+            }
+        }
+    }
+    
+    // Preview
+    struct WeeklyScreen_Previews: PreviewProvider {
+        static var previews: some View {
+            WeeklyScreen(viewModel: ApiViewModel())
         }
     }
 }
-
-
-
-
-
-
-// AddMealView for adding a new meal
-struct AddMealView: View {
-//    var meal: fakeMeal?
-    var body: some View {
-        Text("Add a new meal")
-    }
-}
-
-
-// MealDetailsView for showing the details of a selected meal
-struct MealDetailsView: View {
-    var meal: fakeMeal?
-    var body: some View {
-        if let meal = meal {
-            Text("Meal details: \(meal.name), \(meal.calories) calories")
-        } else {
-            Text("No meal details available")
-        }
-    }
-}
-  
-// Preview
-struct WeeklyScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        WeeklyScreen(viewModel: WeeklyScreenViewModel())
-    }
-}
-

@@ -27,7 +27,7 @@ struct HomeContentView: View {
                 CustomTeal.MyTeal
                     .ignoresSafeArea(edges: .top)
                 VStack{
-                    favorites(showingSheet: $showingSheet, favoritesList: $favoritesList, goalShowingSheet: <#Binding<Bool>#>)
+                    favorites(showingSheet: $showingSheet, favoritesList: $favoritesList, goalShowingSheet: $goalShowingSheet)
                         .padding(.vertical)
                         .padding(.vertical)
                     BLDView()
@@ -52,7 +52,7 @@ struct HomeContentView: View {
                                         }
                                 )
                                 .sheet(isPresented: $StatSheetShowing) {
-                                    StatSheet()
+                                    StatSheet(viewModel: ApiViewModel())
                                         .background(Color.gray)
                                 }
                             Rectangle()
@@ -91,7 +91,7 @@ struct swipeView: View
     var body: some View{
         ZStack{
             if isViewVisible{
-                WeeklyScreen(viewModel: WeeklyScreenViewModel())
+                WeeklyScreen(viewModel: ApiViewModel())
                 
 
             }
@@ -274,11 +274,3 @@ struct HomeContentView_Previews: PreviewProvider {
         swipeView()
     }
 }
-
-
-
-
-
-
-
-
