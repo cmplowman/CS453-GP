@@ -30,69 +30,6 @@ struct fakeView: View {
     }
 }
 
-//
-//ViewModel
-//
-class WeeklyScreenViewModel: ObservableObject {
-    @Published var week: [Day]
-    
-    //initializer
-    init() {
-        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) }
-        setupDefaultMeals() //take out when have proper adding
-    }
-    private static func dayName(for dayOfWeek: Int) -> String {
-        ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]
-    }
-    
-    //creates example meals for each day/time
-    private func setupDefaultMeals() {
-        for i in 0..<week.count {
-            week[i].breakfast = fakeMeal(name: "Pancakes", calories: 300)
-//            week[i].lunch = fakeMeal(name: "Sandwich", calories: 500)
-            week[i].dinner = fakeMeal(name: "Pasta", calories: 700)
-        }
-    }
-    
-    //
-//    func updateMeal(for dayOfWeek: Int, meal: fakeMeal, type: MealType) {
-//        if let index = week.firstIndex(where: { $0.dayOfWeek == dayOfWeek }) {
-//            switch type {
-//            case .breakfast:
-//                week[index].breakfast = meal
-//            case .lunch:
-//                week[index].lunch = meal
-//            case .dinner:
-//                week[index].dinner = meal
-//            }
-//            self.objectWillChange.send()
-//        }
-//    }
-}
-
-
-
-
-//
-// Model
-//
-//day object - contians day and 3 meal slots
-struct Day: Identifiable {
-    let id: Int
-    let dayOfWeek: Int
-    let name: String
-    var breakfast: fakeMeal?
-    var lunch: fakeMeal?
-    var dinner: fakeMeal?
-}
-
-//simple meal object
-struct fakeMeal: Identifiable, Equatable {
-    let id = UUID()
-    var name: String
-    var calories: Int
-}
-
 enum MealType {
     case breakfast, lunch, dinner
 }
@@ -106,10 +43,10 @@ enum MealType {
 //
 //Week Screen
 struct WeeklyScreen: View {
-    @ObservedObject var viewModel: WeeklyScreenViewModel
+    @ObservedObject var viewModel: ApiViewModel
     @State private var showingAddMeal = false
     @State private var showingMealDetails = false
-    @State private var selectedMeal: fakeMeal?
+    @State private var selectedMeal: Food?
     
     var body: some View {
         VStack {
@@ -158,12 +95,7 @@ struct WeeklyScreen: View {
         }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-            //            AddMealScreen(viewModel: ApiViewModel(), pickerSelection: testMeal(name: "Candy", id: 9, calories: 700), favoriteSelection: testMeal(name: "Candy", id: 9, calories: 700))
-            //                }
-            //updates the meal being passed each time the current time is changed
-            //        .onChange(of: selectedMeal) { _ in
-            //                    self.showingMealDetails = (self.selectedMeal != nil)
-            //                }
+
         }
     }
     
@@ -171,9 +103,9 @@ struct WeeklyScreen: View {
     // MealView component - the buttons
     struct MealView: View {
         let mealType: MealType
-        var meal: fakeMeal?
+        var meal: Food?
         var addMealAction: () -> Void
-        var showMealDetailsAction: (fakeMeal) -> Void
+        var showMealDetailsAction: (Food) -> Void
         
         var body: some View {
             VStack {
@@ -240,7 +172,7 @@ struct WeeklyScreen: View {
     
     // MealDetailsView for showing the details of a selected meal
     struct MealDetailsView: View {
-        var meal: fakeMeal?
+        var meal: Food?
         var body: some View {
             if let meal = meal {
                 Text("Meal details: \(meal.name), \(meal.calories) calories")
@@ -253,7 +185,7 @@ struct WeeklyScreen: View {
     // Preview
     struct WeeklyScreen_Previews: PreviewProvider {
         static var previews: some View {
-            WeeklyScreen(viewModel: WeeklyScreenViewModel())
+            WeeklyScreen(viewModel: ApiViewModel())
         }
     }
 }
