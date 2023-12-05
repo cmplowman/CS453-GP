@@ -9,6 +9,10 @@ import SwiftUI
 
 struct AddMealScreen: View {
     @ObservedObject var viewModel: ApiViewModel
+    @Binding var showingAddMeal: Bool
+    @Binding var plsStop: Bool
+    @Binding var currentDayID: Int
+    @Binding var currentMealSlot: MealType
     @State var favoritedMeals: [Food] = []
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
@@ -16,6 +20,7 @@ struct AddMealScreen: View {
     @State var pickerSelection = "Custom Meal"
     @State var favoriteSelection = ""
     
+    //    var onMealSelected: (Food?) -> Void
     
     var body: some View {
         NavigationView{
@@ -124,7 +129,13 @@ struct AddMealScreen: View {
                     
                     //add meal button
                     Button {
-                        
+                        let theFood: Food = viewModel.combineFoods()
+                        viewModel.selectedMeal = theFood
+                        print(viewModel.selectedMeal)
+//                        onMealSelected(viewModel.selectedMeal)
+                        viewModel.updateMeal(forDayID: currentDayID, mealType: currentMealSlot, withMeal: theFood)
+                        plsStop=false
+                        showingAddMeal = false
                         // send food obj to weekly screen here
                         
                         //                        if query != ""
@@ -161,8 +172,8 @@ struct AddMealScreen: View {
     }
 }
 
-struct AddMealScreen_Previews: PreviewProvider {
-    static var previews: some View {
-        AddMealScreen(viewModel: ApiViewModel())
-    }
-}
+//struct AddMealScreen_Previews: PreviewProvider {
+//    static var previews: some View {
+//        AddMealScreen(viewModel: ApiViewModel())
+//    }
+//}

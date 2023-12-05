@@ -36,6 +36,7 @@ struct Day: Codable, Identifiable {
 class ApiViewModel: ObservableObject {
     @Published var week: [Day]
     @Published var foods = [Food]()
+    @Published var selectedMeal: Food? //noot
     @Published var query: String = ""
     
     @Published var weeklyCals = 12.0
@@ -322,7 +323,27 @@ class ApiViewModel: ObservableObject {
         }
     
     }
+    
+    func updateMeal(forDayID dayID: Int, mealType: MealType, withMeal meal: Food) {
+        print("in updateMeal")
+        print(meal)
+        guard let index = week.firstIndex(where: { $0.id == dayID }) else { return }
+        print("past guard")
+        switch mealType {
+        case .breakfast:
+            print("update for B")
+            week[index].breakfast = meal
+        case .lunch:
+            print("update for L")
+            week[index].lunch = meal
+        case .dinner:
+            print("update for D")
+            week[index].dinner = meal
+        }
+    }
+
 }
+
 public extension UserDefaults {
 
    func setCodable<T: Codable>(_ object: T, forKey: String) throws {
