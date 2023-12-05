@@ -9,8 +9,14 @@ import SwiftUI
 
 struct StatSheet: View {
     @ObservedObject var viewModel: ApiViewModel
+    @State var GoalSheet = false
     var body: some View {
         VStack {
+            Text("Goals")
+                .foregroundColor(CustomTeal.MyTeal)
+                .font(.system(size: 30))
+                .padding()
+            
             ProgressView(value: viewModel.weeklyCals, total: viewModel.goalCals) {
                 Text("\(String(format: "%.2f", viewModel.weeklyCals))cal. / \(String(format: "%.2f", viewModel.goalCals))cal.")
                     .foregroundColor(Color.white)
@@ -60,11 +66,25 @@ struct StatSheet: View {
             .progressViewStyle(LinearProgressViewStyle(tint: .green))
             .padding()
             
-//            Button {
-//                
-//            }
+            Button("Edit Goals") {
+                GoalSheet.toggle()
+            }
+            .buttonStyle(.borderedProminent)
+            .foregroundColor(Color.black)
+            .tint(CustomTeal.MyTeal)
+            .controlSize(.large)
+            .sheet(isPresented: $GoalSheet) {
+                GoalEditScreen(viewModel: ApiViewModel())
+                    .background(Color.gray)
+            }
             
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+struct Goals_Previews: PreviewProvider {
+    static var previews: some View {
+        StatSheet(viewModel: ApiViewModel()).background(Color.gray)
     }
 }

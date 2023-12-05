@@ -19,6 +19,7 @@
 		3F27EB6C2AF16436000C3AE0 /* TESTUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB6B2AF16436000C3AE0 /* TESTUITests.swift */; };
 		3F27EB6E2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB6D2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift */; };
 		3F27EB7F2AF17043000C3AE0 /* Favorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F27EB7E2AF17043000C3AE0 /* Favorites.swift */; };
+		3FA865D22B1EFFA6005F20FF /* GoalEditScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA865D12B1EFFA6005F20FF /* GoalEditScreen.swift */; };
 		D0B7B3A02AF402F700AD24A9 /* WeeklyScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B7B39F2AF402F700AD24A9 /* WeeklyScreen.swift */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		3F27EB6B2AF16436000C3AE0 /* TESTUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTUITests.swift; sourceTree = "<group>"; };
 		3F27EB6D2AF16436000C3AE0 /* TESTUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		3F27EB7E2AF17043000C3AE0 /* Favorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Favorites.swift; sourceTree = "<group>"; };
+		3FA865D12B1EFFA6005F20FF /* GoalEditScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalEditScreen.swift; sourceTree = "<group>"; };
 		D0B7B39F2AF402F700AD24A9 /* WeeklyScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeeklyScreen.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +113,7 @@
 				3F1453952B1D0B9F00801F3E /* APITest.swift */,
 				3F27EB7E2AF17043000C3AE0 /* Favorites.swift */,
 				3F1453972B1D159900801F3E /* StatSheet.swift */,
+				3FA865D12B1EFFA6005F20FF /* GoalEditScreen.swift */,
 				D0B7B39F2AF402F700AD24A9 /* WeeklyScreen.swift */,
 				24B43EB12AF430AB0048F621 /* AddMealScreen.swift */,
 				24B43EB32AF434F60048F621 /* Home Screen.swift */,
@@ -279,6 +282,7 @@
 				3F1453942B1D0A8900801F3E /* ViewModel.swift in Sources */,
 				3F27EB7F2AF17043000C3AE0 /* Favorites.swift in Sources */,
 				D0B7B3A02AF402F700AD24A9 /* WeeklyScreen.swift in Sources */,
+				3FA865D22B1EFFA6005F20FF /* GoalEditScreen.swift in Sources */,
 				3F27EB512AF16435000C3AE0 /* TESTApp.swift in Sources */,
 				24B43EB42AF434F60048F621 /* Home Screen.swift in Sources */,
 				3F1453962B1D0B9F00801F3E /* APITest.swift in Sources */,

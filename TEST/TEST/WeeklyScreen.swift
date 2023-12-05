@@ -21,15 +21,43 @@
 
 import SwiftUI
 
-
-struct fakeView: View {
-    var body: some View {
-        Color.red
-            .edgesIgnoringSafeArea(.all)
-            .overlay(Text("View 1").foregroundColor(.white))
+//
+//ViewModel
+//
+class WeeklyScreenViewModel: ObservableObject {
+    @Published var week: [Day]
+    
+    //initializer
+    init() {
+        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) } //take out when have proper adding
     }
+    private static func dayName(for dayOfWeek: Int) -> String {
+        ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]
+    }
+    
+    //
+//    func updateMeal(for dayOfWeek: Int, meal: fakeMeal, type: MealType) {
+//        if let index = week.firstIndex(where: { $0.dayOfWeek == dayOfWeek }) {
+//            switch type {
+//            case .breakfast:
+//                week[index].breakfast = meal
+//            case .lunch:
+//                week[index].lunch = meal
+//            case .dinner:
+//                week[index].dinner = meal
+//            }
+//            self.objectWillChange.send()
+//        }
+//    }
 }
 
+
+
+
+//
+// Model
+//
+//day object - contians day and 3 meal slots
 enum MealType {
     case breakfast, lunch, dinner
 }
@@ -46,7 +74,10 @@ struct WeeklyScreen: View {
     @ObservedObject var viewModel: ApiViewModel
     @State private var showingAddMeal = false
     @State private var showingMealDetails = false
+    @State private var plsStop = true
     @State private var selectedMeal: Food?
+    @State private var currentDayID = 0
+    @State private var currentMealSlot: MealType = .breakfast
     
     
     var body: some View {
@@ -61,21 +92,21 @@ struct WeeklyScreen: View {
                     //Day
                     HStack {
                         //breakfast
-                        MealView(mealType: .breakfast, meal: day.breakfast,
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .breakfast, meal: day.breakfast,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
                             self.showingMealDetails = true
                         })
                         //lunch
-                        MealView(mealType: .lunch, meal: day.lunch,
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.lunch,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
                             self.showingMealDetails = true
                         })
                         //dinner
-                        MealView(mealType: .dinner, meal: day.dinner,
+                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.dinner,
                                  addMealAction: { self.showingAddMeal = true },
                                  showMealDetailsAction: { meal in
                             self.selectedMeal = meal
@@ -96,7 +127,7 @@ struct WeeklyScreen: View {
         }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-            AddMealScreen(viewModel: ApiViewModel())
+            AddMealScreen(viewModel: ApiViewModel(), showingAddMeal: $showingAddMeal, plsStop: $plsStop, currentDayID: $currentDayID, currentMealSlot: $currentMealSlot)
 
         }
     }
@@ -104,6 +135,9 @@ struct WeeklyScreen: View {
     
     // MealView component - the buttons
     struct MealView: View {
+        @ObservedObject var viewModel: ApiViewModel
+        @Binding var plsStop: Bool
+        var dayID: Int
         let mealType: MealType
         var meal: Food?
         var addMealAction: () -> Void
@@ -131,7 +165,36 @@ struct WeeklyScreen: View {
                     )
                 } else {
                     //no meal
-                    Button(action: addMealAction) {
+                    //                    Button(action: addMealAction) {
+                    //                        Image(systemName: "plus")
+                    //                            .foregroundColor(Color.black)
+                    //                        viewModel.updateMeal(forDayID: dayID, mealType: mealType, withMeal: viewModel.selectedMeal)
+                    //                    }
+                    //                    .buttonStyle(PlainButtonStyle())
+                    //                    .padding()
+                    //                    .background(
+                    //                        RoundedRectangle(cornerRadius: 5)
+                    //                            .fill(CustomTeal.MyTeal)
+                    //                    )
+                                        Button(action: {
+                                            // First, perform the addMealAction, if it has additional functionality.
+                                            print("pressed add button")
+                                            addMealAction()
+                                            print("meal action over")
+                    //                        while(plsStop==true){
+                    //                            if(plsStop==false){
+                    //                                if let selectedMeal = viewModel.selectedMeal {
+                    //                                    viewModel.updateMeal(forDayID: dayID, mealType: mealType, withMeal: selectedMeal)
+                    //                                }
+                    //                            }
+                    //                        }
+                    //                        print("back from add screen")
+                    //                        // Then, update the meal in the viewModel.
+                    //                        if let selectedMeal = viewModel.selectedMeal {
+                    //                            viewModel.updateMeal(forDayID: dayID, mealType: mealType, withMeal: selectedMeal)
+                    //                        }
+                    //                        print("back from update meal")
+                                        }) {
                         Image(systemName: "plus")
                             .foregroundColor(Color.black)
                         
