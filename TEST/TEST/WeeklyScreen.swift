@@ -48,6 +48,7 @@ struct WeeklyScreen: View {
     @State private var showingMealDetails = false
     @State private var selectedMeal: Food?
     
+    
     var body: some View {
         VStack {
             Text("Week").font(.largeTitle)
@@ -107,6 +108,8 @@ struct WeeklyScreen: View {
         var meal: Food?
         var addMealAction: () -> Void
         var showMealDetailsAction: (Food) -> Void
+        var dayID: Int
+    
         
         var body: some View {
             VStack {
@@ -131,6 +134,9 @@ struct WeeklyScreen: View {
                     Button(action: addMealAction) {
                         Image(systemName: "plus")
                             .foregroundColor(Color.black)
+                        
+                        viewModel.aDay.time =
+                        
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding()

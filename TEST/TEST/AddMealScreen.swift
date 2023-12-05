@@ -9,13 +9,12 @@ import SwiftUI
 
 struct AddMealScreen: View {
     @ObservedObject var viewModel: ApiViewModel
-    @State var favoritedMeals: [Food] = []
     @State private var showingAlert1 = false
     @State private var showingAlert2 = false
     @State var choice: [String] = ["Custom Meal", "Favorites"]
     @State var pickerSelection = "Custom Meal"
-    @State var favoriteSelection = ""
     
+    @State var foodItem = Food(name: "Chicken", calories: 0.0, serving_size_g: 0.0, fat_total_g: 0.0, fat_saturated_g: 0.0, protein_g: 0.0, sodium_mg: 0.0, potassium_mg: 0.0, cholesterol_mg: 0.0, carbohydrates_total_g: 0.0, fiber_g: 0.0, sugar_g: 0.0)
     
     var body: some View {
         NavigationView{
@@ -33,11 +32,10 @@ struct AddMealScreen: View {
                         if pickerSelection == "Custom Meal"
                         {
                             TextField("Custom Meal", text: $viewModel.query)
-                            
                         }
                         else{
                             
-                            if favoritedMeals.isEmpty
+                            if viewModel.favoritesList.isEmpty
                             {
                                 Button("Show Alert")
                                 {
@@ -45,24 +43,30 @@ struct AddMealScreen: View {
                                 }
                                 
                             }
-                            //                            else {
-                            //                                Picker(selection: $favoriteSelection, label: Text("Select From Favorites"), content: {
-                            //
-                            //                                    ForEach(favoritedMeals) { meal in
-                            //                                        Text(meal.name).tag(meal)
-                            //                                    }
-                            //                                })
-                            //                            }
+                            else{
+                                
+                                Picker("Select From Favorites", selection: $foodItem) {
+                                    ForEach(viewModel.favoritesList) { fav in
+                                        Text("\(fav.name.prefix(1).capitalized + fav.name.dropFirst())").tag(fav)
+                                    }
+                                }
+                            }
                         }
                         Button("Show Nutritional Values") {
-                            viewModel.getNutrition(query: viewModel.query)
+                            if pickerSelection == "Custom Meal"
+                            {
+                                viewModel.getNutrition(query: viewModel.query)
+                            }
+                            else{
+                                viewModel.query = foodItem.name
+                                viewModel.getNutrition(query: viewModel.query)
+                            }
                         }
                         List {
                             ForEach(viewModel.foods) { food in
                                 HStack {
                                     VStack(alignment: .leading) {
-                                        Text("\(food.name)")
-                                            .font(.title)
+                                        Text("\(food.name.prefix(1).capitalized + food.name.dropFirst())")                                            .font(.title)
                                             .padding(.bottom)
                                     }
                                     .minimumScaleFactor(0.01)
@@ -101,9 +105,16 @@ struct AddMealScreen: View {
                     
                     //favorite button
                     Button {
-        
                         
-                    } label: {
+                        let food = viewModel.combineFoods()
+                        if !viewModel.favoritesList.contains(where: { $0.name == food.name }) {
+                            viewModel.addFavorite(f: food)
+                        } else {
+                            showingAlert2.toggle()
+                        }
+                        
+                        
+                    }label: {
                         Label("Favorite", systemImage: "star.fill")
                             .frame(width: 340)
                             .font(.system(size: 30))
@@ -124,25 +135,23 @@ struct AddMealScreen: View {
                     
                     //add meal button
                     Button {
-                        
-                        // send food obj to weekly screen here
-                        
-                        //                        if query != ""
-                        //                        {
-                        //                            //addedMeal.append(customMeal)
-                        //                        }
-                        //                        else if pickerSelection.name == "Favorites"
-                        //                        {
-                        //                            // addedMeal.append(favoriteSelection)
-                        //                        }
-                        //                        else if pickerSelection.name == "Custom Meal" && query.isEmpty
-                        //                        {
-                        //                            //Do nothing
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            addedMeal.append(pickerSelection)
-                        //                        }
+                        let food = viewModel.combineFoods()
+                        let dayOfWeek = viewModel.aDay.dayOfWeek
+                        let timeOfDay = viewModel.aDay
+                        //if it is breakfast
+//                        if timeOfDay == "breakfast"
+//                        {
+//                            viewModel.addBreakfast(f: food, dayNum: dayOfWeek)
+//                        }
+//                        else if timeOfDay == "lunch"
+//                        {
+//                            viewModel.addLunch(f: food, dayNum: dayOfWeek)
+//                        }
+//                        else if timeOfDay == "dinner"
+//                        {
+//                            viewModel.addDinner(f: food, dayNum: dayOfWeek)
+//                        }
+
                         
                     } label: {
                         Label("Add Meal", systemImage: "fork.knife.circle.fill")

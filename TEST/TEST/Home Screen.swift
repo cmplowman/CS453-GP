@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct HomeContentView: View {
     @State private var swipeOffset: CGFloat = 0
@@ -27,10 +28,13 @@ struct HomeContentView: View {
                 CustomTeal.MyTeal
                     .ignoresSafeArea(edges: .top)
                 VStack{
+                    
+                    
                     favorites(showingSheet: $showingSheet, favoritesList: $favoritesList, goalShowingSheet: $goalShowingSheet)
                         .padding(.vertical)
                         .padding(.vertical)
                     BLDView()
+        
                 }
                 .toolbar {
                     ToolbarItem(placement: .bottomBar) {
@@ -88,6 +92,7 @@ struct goalsView: View {
 struct swipeView: View
 {
     @State private var isViewVisible = false
+    @State var StatSheetShowing = false
     var body: some View{
         ZStack{
             if isViewVisible{
@@ -100,8 +105,16 @@ struct swipeView: View
             }
             
         }
+        Button("+")
+        {
+            isViewVisible = true
+        }
+        /*
         .gesture(
-            DragGesture(minimumDistance: 20, coordinateSpace: .local)
+            DragGesture()
+                .onChanged { value in
+                    swipeOffset = value.translation.height
+                }
                 .onEnded { value in
                     if value.translation.width < -50 {
                         isViewVisible = false
@@ -110,9 +123,12 @@ struct swipeView: View
                     {
                         isViewVisible = true
                     }
+                    swipeOffset = 0
+                    
                 }
-            )
+        )
         .animation(.default, value: isViewVisible)
+         */
     }
     
 }
@@ -124,42 +140,19 @@ struct favorites: View {
     var body: some View {
         VStack{
             HStack{
-                Button("G")
-                {
-                    goalShowingSheet.toggle()
-                }
-                .padding(.trailing)
-                .padding(.trailing)
-                .padding(.trailing)
-                .font(.system(size: 20))
-                 
-
-
-                Text("Meal Tracker")
-                    //.padding(.leading)
-                    //.padding(.leading)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .padding(.trailing)
-
-                    .padding(.vertical)
-                    .font(.system(size: 35))
-                    .foregroundStyle(.white)
                 
-                Text("Meal Tracker")
+                Text("Daily Dish")
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.vertical)
                     .font(.system(size: 35))
                     .foregroundStyle(.white)
-//                Image(.star)
-//                    .resizable()
-//                    .frame(width: 30, height: 30)
-//                    .padding(.leading)
-//                    .padding(.leading)
+                Image(.star2)
+                    .resizable()
+                    .frame(width: 30, height: 30)
+                    .padding(.leading)
+                    .padding(.leading)
                     
                     .onTapGesture {
                         showingSheet = true
@@ -181,12 +174,13 @@ struct BLDView : View
                 let today = Date()
                 let getDate = today.currentDate()
                 Text("\(getDate)")
-                    .padding(.bottom)
-                    .padding(.bottom)
-                    .padding(.bottom)
-                    .padding(.bottom)
                     .font(.system(size: 28))
                     .foregroundStyle(Color.white)
+            Spacer()
+            .padding(.top)
+            HStack{
+                NavigationLink("weekly screen", destination: WeeklyScreen(viewModel: ApiViewModel()))
+            }
             ZStack{
                 RoundedRectangle(cornerSize: /*@START_MENU_TOKEN@*/CGSize(width: 20, height: 10)/*@END_MENU_TOKEN@*/)
                 
@@ -265,8 +259,6 @@ extension Date{
     }
     
 }
-    
-    //
 
 
 struct HomeContentView_Previews: PreviewProvider {
