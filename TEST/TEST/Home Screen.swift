@@ -124,31 +124,8 @@ struct favorites: View {
     var body: some View {
         VStack{
             HStack{
-                Button("G")
-                {
-                    goalShowingSheet.toggle()
-                }
-                .padding(.trailing)
-                .padding(.trailing)
-                .padding(.trailing)
-                .font(.system(size: 20))
-                 
-
-
-                Text("Meal Tracker")
-                    //.padding(.leading)
-                    //.padding(.leading)
-                    .padding(.leading)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .padding(.trailing)
-                    .padding(.trailing)
-
-                    .padding(.vertical)
-                    .font(.system(size: 35))
-                    .foregroundStyle(.white)
                 
-                Text("Meal Tracker")
+                Text("Daily Dish")
                     .padding(.leading)
                     .padding(.leading)
                     .padding(.leading)

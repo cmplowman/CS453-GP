@@ -38,20 +38,10 @@ class WeeklyScreenViewModel: ObservableObject {
     
     //initializer
     init() {
-        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) }
-        setupDefaultMeals() //take out when have proper adding
+        week = (0...6).map { Day(id: $0, dayOfWeek: $0, name: WeeklyScreenViewModel.dayName(for: $0)) } //take out when have proper adding
     }
     private static func dayName(for dayOfWeek: Int) -> String {
         ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek]
-    }
-    
-    //creates example meals for each day/time
-    private func setupDefaultMeals() {
-        for i in 0..<week.count {
-            week[i].breakfast = fakeMeal(name: "Pancakes", calories: 300)
-//            week[i].lunch = fakeMeal(name: "Sandwich", calories: 500)
-            week[i].dinner = fakeMeal(name: "Pasta", calories: 700)
-        }
     }
     
     //
@@ -77,22 +67,6 @@ class WeeklyScreenViewModel: ObservableObject {
 // Model
 //
 //day object - contians day and 3 meal slots
-struct Day: Codable, Identifiable {
-    var id: Int?
-    var dayOfWeek: Int
-    var name: String
-    var breakfast: fakeMeal?
-    var lunch: fakeMeal?
-    var dinner: fakeMeal?
-}
-
-//simple meal object
-struct fakeMeal: Codable, Identifiable, Equatable {
-    var id = UUID()
-    var name: String
-    var calories: Int
-}
-
 enum MealType {
     case breakfast, lunch, dinner
 }
