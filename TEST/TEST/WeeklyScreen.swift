@@ -55,7 +55,7 @@ struct WeeklyScreen: View {
             List(viewModel.week) { day in
                 VStack(alignment: .leading) {
                     Text(day.name).font(.title)
-                        .foregroundColor(CustomTeal.MyTeal)
+                        .foregroundColor(Color.black)
                     
                     //Day
                     HStack {
@@ -95,6 +95,7 @@ struct WeeklyScreen: View {
         }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
+            AddMealScreen(viewModel: ApiViewModel())
 
         }
     }
@@ -110,32 +111,32 @@ struct WeeklyScreen: View {
         var body: some View {
             VStack {
                 Text(mealTypeTitle) //B,L,D
-                    .foregroundColor(CustomTeal.MyTeal)
+                    .foregroundColor(Color.black)
                 
                 //check if theres a meal in the slot
                 if let meal = meal {
                     //has meal
                     Button(action: { showMealDetailsAction(meal) }) {
                         Text(meal.name)
-                            .foregroundColor(CustomTeal.MyTeal)
+                            .foregroundColor(Color.black)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 5)
-                            .fill(CustomGrey.MyGrey.opacity(0.6))
+                            .fill(CustomTeal.MyTeal)
                     )
                 } else {
                     //no meal
                     Button(action: addMealAction) {
                         Image(systemName: "plus")
-                            .foregroundColor(CustomTeal.MyTeal)
+                            .foregroundColor(Color.black)
                     }
                     .buttonStyle(PlainButtonStyle())
                     .padding()
                     .background(
                         RoundedRectangle(cornerRadius: 5)
-                            .fill(CustomGrey.MyGrey.opacity(0.6))
+                            .fill(CustomTeal.MyTeal)
                     )
                 }
             }
@@ -181,11 +182,10 @@ struct WeeklyScreen: View {
             }
         }
     }
-    
-    // Preview
-    struct WeeklyScreen_Previews: PreviewProvider {
-        static var previews: some View {
-            WeeklyScreen(viewModel: ApiViewModel())
-        }
+}
+// Preview
+struct WeeklyScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        WeeklyScreen(viewModel: ApiViewModel())
     }
 }

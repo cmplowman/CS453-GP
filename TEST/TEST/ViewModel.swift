@@ -7,7 +7,7 @@
 import Foundation
 
 struct Food: Codable, Identifiable {
-    var id = UUID()
+    let id = UUID()
     var name: String
     var calories: Double
     var serving_size_g: Double
@@ -122,6 +122,24 @@ class ApiViewModel: ObservableObject {
 //            week[i].dinner = fakeMeal(name: "Pasta", calories: 700)
         }
     }
+    
+    //removes each of the meals in given day
+        private func resetDayMeals(day: Int){
+            for i in 0..<week.count{
+                if(i==day){
+                    week[day].breakfast = nil
+                    week[day].lunch = nil
+                    week[day].dinner = nil
+                }
+            }
+        }
+        
+        //removes every meal in every day of the week
+        private func resetWeekMeals(){
+            for i in 0..<week.count{
+                resetDayMeals(day: i)
+            }
+        }
 
     func getNutrition(query: String) {
         ApiViewModel().loadData(query: self.query) { foods in
