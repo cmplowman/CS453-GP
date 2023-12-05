@@ -176,32 +176,32 @@ class ApiViewModel: ObservableObject {
     //need to be updated each time user inputs their goal for the week ----> changes when user changes it
     func updateCals(c: Double)
     {
-        UserDefaults.standard.set(weeklyCals, forKey: myWeekCals)
+        UserDefaults.standard.set(weeklyCals, forKey: myGoalCals)
     }
         
     func updateFats(f: Double)
     {
-        UserDefaults.standard.set(weeklyFats, forKey: myWeekFats)
+        UserDefaults.standard.set(weeklyFats, forKey: myGoalFats)
     }
     func updateProtein(p: Double)
     {
-        UserDefaults.standard.set(weeklyProtein, forKey: myWeekProtein)
+        UserDefaults.standard.set(weeklyProtein, forKey: myGoalProtein)
     }
     func updateSodium(s: Double)
     {
-        UserDefaults.standard.set(weeklySodium, forKey: myWeekSod)
+        UserDefaults.standard.set(weeklySodium, forKey: myGoalSod)
     }
     func updateCholest(c: Double)
     {
-        UserDefaults.standard.set(weeklyCholest, forKey: myWeekCholest)
+        UserDefaults.standard.set(weeklyCholest, forKey: myGoalCholest)
     }
     func updateCarbs(c: Double)
     {
-        UserDefaults.standard.set(weeklyCarbs, forKey: myWeekCarbs)
+        UserDefaults.standard.set(weeklyCarbs, forKey: myGoalCarbs)
     }
     func updateSugar(s: Double)
     {
-        UserDefaults.standard.set(weeklySugars, forKey: myWeekSugar)
+        UserDefaults.standard.set(weeklySugars, forKey: myGoalSugar)
     }
          
     //WEEKLY: dont get touched by user
