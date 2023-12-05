@@ -92,26 +92,26 @@ struct WeeklyScreen: View {
                     //Day
                     HStack {
                         //breakfast
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .breakfast, meal: day.breakfast,
-                                 addMealAction: { self.showingAddMeal = true },
-                                 showMealDetailsAction: { meal in
-                            self.selectedMeal = meal
-                            self.showingMealDetails = true
-                        })
-                        //lunch
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.lunch,
-                                 addMealAction: { self.showingAddMeal = true },
-                                 showMealDetailsAction: { meal in
-                            self.selectedMeal = meal
-                            self.showingMealDetails = true
-                        })
-                        //dinner
-                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.dinner,
-                                 addMealAction: { self.showingAddMeal = true },
-                                 showMealDetailsAction: { meal in
-                            self.selectedMeal = meal
-                            self.showingMealDetails = true
-                        })
+//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .breakfast, meal: day.breakfast,
+//                                 addMealAction: { self.showingAddMeal = true },
+//                                 showMealDetailsAction: { meal in
+//                            self.selectedMeal = meal
+//                            self.showingMealDetails = true
+//                        })
+//                        //lunch
+//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.lunch,
+//                                 addMealAction: { self.showingAddMeal = true },
+//                                 showMealDetailsAction: { meal in
+//                            self.selectedMeal = meal
+//                            self.showingMealDetails = true
+//                        })
+//                        //dinner
+//                        MealView(viewModel: viewModel, plsStop: $plsStop, dayID: day.dayOfWeek, mealType: .lunch, meal: day.dinner,
+//                                 addMealAction: { self.showingAddMeal = true },
+//                                 showMealDetailsAction: { meal in
+//                            self.selectedMeal = meal
+//                            self.showingMealDetails = true
+//                        })
                         
                         
                     }
@@ -127,7 +127,7 @@ struct WeeklyScreen: View {
         }
         //opens add meal view
         .sheet(isPresented: $showingAddMeal, onDismiss: { self.selectedMeal = nil }) {
-            AddMealScreen(viewModel: ApiViewModel(), showingAddMeal: $showingAddMeal, plsStop: $plsStop, currentDayID: $currentDayID, currentMealSlot: $currentMealSlot)
+//            AddMealScreen(viewModel: ApiViewModel(), showingAddMeal: $showingAddMeal, plsStop: $plsStop, currentDayID: $currentDayID, currentMealSlot: $currentMealSlot)
 
         }
     }
@@ -142,7 +142,7 @@ struct WeeklyScreen: View {
         var meal: Food?
         var addMealAction: () -> Void
         var showMealDetailsAction: (Food) -> Void
-        var dayID: Int
+       // var dayID: Int
     
         
         var body: some View {
@@ -198,7 +198,7 @@ struct WeeklyScreen: View {
                         Image(systemName: "plus")
                             .foregroundColor(Color.black)
                         
-                        viewModel.aDay.time =
+                       // viewModel.aDay.time =
                         
                     }
                     .buttonStyle(PlainButtonStyle())
