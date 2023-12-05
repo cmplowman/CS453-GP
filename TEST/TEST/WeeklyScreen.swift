@@ -249,7 +249,7 @@ struct MealDetailsView: View {
         }
     }
 }
-
+  
 // Preview
 struct WeeklyScreen_Previews: PreviewProvider {
     static var previews: some View {

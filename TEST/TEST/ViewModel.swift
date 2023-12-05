@@ -63,7 +63,7 @@ class ApiViewModel: ObservableObject {
             fullMeal.sodium_mg += f.sodium_mg
             fullMeal.cholesterol_mg += f.cholesterol_mg
         }
-        return fullMeal
+        return fullMeal 
     }
     func loadData(query: String, completion: @escaping ([Food]) -> ()) {
         print("\(query)")
